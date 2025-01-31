@@ -18,61 +18,30 @@ jobs:
     #   )           
   
   build-inventory:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Run Build Inventory Workflow
-        uses: ./.github/workflows/build-inventory.yml
+    uses: ./.github/workflows/build-inventory.yml        
     # if: |
     #   github.event.head_commit.modified && (
     #     'terraform-inventory/**' in github.event.head_commit.modified
     #   )   
 
   build-debops:
-    runs-on: ubuntu-latest
-    needs: build-inventory
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Run Build DebOps Workflow
-        uses: ./.github/workflows/build-debops.yml
+    uses: ./.github/workflows/build-debops.yml
     # if: |
     #   github.event.head_commit.modified && (
     #     'ansible/Dockerfile' in github.event.head_commit.modified
     #   )
 
   deploy-cdk:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Run Deploy CDK Workflow
-        uses: ./.github/workflows/deploy-cdk.yml
+    uses: ./.github/workflows/deploy-cdk.yml
 
   terraform:
-    runs-on: ubuntu-latest
+    uses: ./.github/workflows/terraform.yml
     needs: deploy-cdk
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Run Terraform Workflow
-        uses: ./.github/workflows/terraform.yml
 
   generate-inventory:
-    runs-on: ubuntu-latest
+    uses: ./.github/workflows/generate-inventory.yml
     needs: terraform
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Run Generate Inventory Workflow
-        uses: ./.github/workflows/generate-inventory.yml
 
   run-debops:
-    runs-on: ubuntu-latest
+    uses: ./.github/workflows/run-debops.yml
     needs: generate-inventory
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Run Run DebOps Workflow
-        uses: ./.github/workflows/run-debops.yml
