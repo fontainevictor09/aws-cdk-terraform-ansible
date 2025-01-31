@@ -1,0 +1,3 @@
+aws_1_hostname: "{{ lookup('ansible.builtin.env', 'AWS_1') }}"
+# aws_2_hostname: "{{ lookup('ansible.builtin.env', 'AWS_2') }}"
+# aws_3_hostname: "{{ lookup('ansible.builtin.env', 'AWS_3') }}"

@@ -1,0 +1,48 @@
+name: Deploy Pipeline
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - cdk-backend/**
+      - terraform-inventory/**
+      - ansible/Dockerfile
+
+jobs:
+  build-cdk:
+    uses: ./.github/workflows/build-cdk.yml
+    if: |
+      github.event.head_commit.modified && (
+        'cdk-backend/**' in github.event.head_commit.modified
+      )   
+
+  build-inventory:
+    uses: ./.github/workflows/build-inventory.yml
+    if: |
+      github.event.head_commit.modified && (
+        'terraform-inventory/**' in github.event.head_commit.modified
+      )   
+
+  build-debops:
+    needs: build-inventory
+    uses: ./.github/workflows/build-debops.yml
+    if: |
+      github.event.head_commit.modified && (
+        'ansible/Dockerfile' in github.event.head_commit.modified
+      )
+
+  deploy-cdk:
+    uses: ./.github/workflows/deploy-cdk.yml
+
+  terraform:
+    needs: deploy-cdk
+    uses: ./.github/workflows/terraform.yml
+
+  generate-inventory:
+    needs: terraform
+    uses: ./.github/workflows/generate-inventory.yml
+
+  run-debops:
+    needs: generate-inventory
+    uses: ./.github/workflows/run-debops.yml

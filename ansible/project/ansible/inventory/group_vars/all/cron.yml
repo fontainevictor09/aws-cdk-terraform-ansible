@@ -1,0 +1,4 @@
+cron__crontab_jobs:
+  - name: 'docker-image-prune'
+    special_time: 'daily'
+    job: 'docker system prune --all --force --volumes'

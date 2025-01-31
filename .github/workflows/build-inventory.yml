@@ -1,0 +1,26 @@
+name: Generate Ansible Inventory
+
+on:
+  workflow_call:
+
+jobs:
+  generate-inventory:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/${{ github.repository_owner }}/terraform-inventory:latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download Terraform State
+        uses: actions/download-artifact@v4
+        with:
+          name: terraform-state
+
+      - name: Generate Ansible Inventory
+        run: python terraform_inventory.py terraform.tfstate inventory.ini
+
+      - name: Upload Inventory
+        uses: actions/upload-artifact@v4
+        with:
+          name: ansible-inventory
+          path: inventory.ini

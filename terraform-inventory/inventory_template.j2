@@ -1,0 +1,25 @@
+[debops_all_hosts]
+{% for host in hosts %}
+{{ host.name }} ansible_host={{ host.ip }} ansible_user=admin ansible_python_interpreter=/usr/bin/python3
+{{ host.name }}   system_users__self_name=admin
+{% endfor %}
+
+[amazon]
+{% for host in hosts %}
+{{ host.name }}
+{% endfor %}
+
+[debops_service_docker_server]
+{% for host in hosts %}
+{{ host.name }}
+{% endfor %}
+
+[portainer]
+{% for host in hosts %}
+{{ host.name }}
+{% endfor %}
+
+[debops_service_fail2ban]
+{% for host in hosts %}
+{{ host.name }}
+{% endfor %}

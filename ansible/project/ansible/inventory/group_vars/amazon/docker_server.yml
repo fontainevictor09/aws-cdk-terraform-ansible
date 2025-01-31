@@ -1,0 +1,10 @@
+docker_server__default_pip_packages:
+  - name: 'docker'
+
+# docker_server__tcp: True
+# docker_server__tcp_allow: ['62.72.16.38']
+
+# docker_server__unencrypted_tcp_port: '2375'
+# docker_server__tcp_port: '2375'
+docker_server__admins: 
+  - "admin"

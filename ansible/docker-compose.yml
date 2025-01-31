@@ -1,0 +1,14 @@
+services:
+
+  ansible:
+    build: 
+      context: .
+    restart: unless-stopped
+    command: bash
+    tty: true
+    environment:
+      ANSIBLE_USER_SSH_PUBLIC_KEY: $ANSIBLE_USER_SSH_PUBLIC_KEY
+      CA_PRIVATE_KEY_CONTENT: $CA_PRIVATE_KEY_CONTENT
+      ROOT_PRIVATE_KEY_CONTENT: $ROOT_PRIVATE_KEY_CONTENT
+    volumes:
+      - './project:/home/ansible/project'

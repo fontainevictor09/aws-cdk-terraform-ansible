@@ -1,0 +1,10 @@
+services:
+
+  cdk-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    tty: true
+    volumes:
+      - './:/app/:cached'
+      - "~/.aws:/root/.aws"      

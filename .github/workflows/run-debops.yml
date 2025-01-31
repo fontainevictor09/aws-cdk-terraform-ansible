@@ -1,0 +1,38 @@
+name: Run DebOps Bootstrap
+
+on:
+  workflow_call:
+
+jobs:
+  debops:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/${{ github.repository_owner }}/debops:latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up SSH
+        run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' | ssh-add -
+
+      - name: Prepare Ansible Configurations
+        run: |
+          mkdir -p ansible/secret/pki/authorities/domain/private
+          mkdir -p ansible/secret/pki/authorities/root/private
+          echo "${{ secrets.CA_PRIVATE_KEY_CONTENT }}" > ansible/secret/pki/authorities/domain/private/key.pem
+          echo "${{ secrets.ROOT_PRIVATE_KEY_CONTENT }}" > ansible/secret/pki/authorities/root/private/key.pem
+          openssl rsa -in ansible/secret/pki/authorities/domain/private/key.pem -check -noout
+          openssl rsa -in ansible/secret/pki/authorities/root/private/key.pem -check -noout
+          export ANSIBLE_CONFIG=./ansible.cfg
+          export ANSIBLE_USER_SSH_PUBLIC_KEY=${{ secrets.ANSIBLE_USER_SSH_PUBLIC_KEY }}
+          bash add_known_hosts.sh
+
+      - name: Download Inventory
+        uses: actions/download-artifact@v4
+        with:
+          name: ansible-inventory
+
+      - name: Move Inventory File
+        run: mv inventory.ini ansible/hosts
+
+      - name: Run Ansible Bootstrap
+        run: debops run bootstrap -i ansible/hosts -l amazon -e 'ansible_user=admin'

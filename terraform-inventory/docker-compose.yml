@@ -1,0 +1,9 @@
+services:
+
+  terraform-inventory:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    tty: true
+    volumes:
+      - './:/app/:cached'

@@ -1,0 +1,20 @@
+name: Build CDK Docker Image
+
+on:
+  workflow_call:
+
+jobs:
+  build-cdk-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+
+      - name: Build CDK Docker image
+        run: docker build -t ghcr.io/${{ github.repository_owner }}/cdk-backend:latest -f cdk-backend/Dockerfile .
+
+      - name: Push CDK Docker image
+        run: docker push ghcr.io/${{ github.repository_owner }}/cdk-backend:latest
