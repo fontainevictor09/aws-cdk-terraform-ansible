@@ -17,6 +17,10 @@ jobs:
         uses: actions/checkout@v2
       - name: Run Build CDK Workflow
         uses: ./.github/workflows/build-cdk.yml  # Appel du workflow local
+    # if: |
+    #   github.event.head_commit.modified && (
+    #     'cdk-backend/**' in github.event.head_commit.modified
+    #   )           
   
   build-inventory:
     runs-on: ubuntu-latest
@@ -25,10 +29,10 @@ jobs:
         uses: actions/checkout@v2
       - name: Run Build Inventory Workflow
         uses: ./.github/workflows/build-inventory.yml
-    if: |
-      github.event.head_commit.modified && (
-        'terraform-inventory/**' in github.event.head_commit.modified
-      )   
+    # if: |
+    #   github.event.head_commit.modified && (
+    #     'terraform-inventory/**' in github.event.head_commit.modified
+    #   )   
 
   build-debops:
     runs-on: ubuntu-latest
@@ -38,10 +42,10 @@ jobs:
         uses: actions/checkout@v2
       - name: Run Build DebOps Workflow
         uses: ./.github/workflows/build-debops.yml
-    if: |
-      github.event.head_commit.modified && (
-        'ansible/Dockerfile' in github.event.head_commit.modified
-      )
+    # if: |
+    #   github.event.head_commit.modified && (
+    #     'ansible/Dockerfile' in github.event.head_commit.modified
+    #   )
 
   deploy-cdk:
     runs-on: ubuntu-latest
