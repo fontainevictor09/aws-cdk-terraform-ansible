@@ -11,12 +11,7 @@ on:
 
 jobs:
   build-cdk:
-    runs-on: ubuntu-latest  # Ajout de l'environnement d'exécution
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Run Build CDK Workflow
-        uses: ./.github/workflows/build-cdk.yml  # Appel du workflow local
+    uses: ./.github/workflows/build-cdk.yml
     # if: |
     #   github.event.head_commit.modified && (
     #     'cdk-backend/**' in github.event.head_commit.modified
