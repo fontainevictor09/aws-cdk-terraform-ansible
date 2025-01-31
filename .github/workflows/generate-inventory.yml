@@ -6,7 +6,6 @@ on:
 jobs:
   generate-inventory:
     runs-on: ubuntu-latest
-    needs: [terraform, build-inventory-image]
     container:
       image: ghcr.io/${{ github.repository_owner }}/terraform-inventory:latest
     steps:
