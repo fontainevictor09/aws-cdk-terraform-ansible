@@ -4,10 +4,10 @@ on:
   push:
     branches:
       - main
-    paths:
-      - cdk-backend/**
-      - terraform-inventory/**
-      - ansible/Dockerfile
+    # paths:
+    #   - cdk-backend/**
+    #   - terraform-inventory/**
+    #   - ansible/Dockerfile
 
 jobs:
   build-cdk:
