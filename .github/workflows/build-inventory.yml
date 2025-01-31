@@ -4,23 +4,22 @@ on:
   workflow_call:
 
 jobs:
-  generate-inventory:
+  build-inventory:
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/${{ github.repository_owner }}/terraform-inventory:latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Download Terraform State
-        uses: actions/download-artifact@v4
-        with:
-          name: terraform-state
+      - name: Log in to GitHub Container Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
 
-      - name: Generate Ansible Inventory
-        run: python terraform_inventory.py terraform.tfstate inventory.ini
+      - name: Set lower case owner name
+        run: echo "OWNER_LC=${OWNER,,}" >> $GITHUB_ENV
+        env:
+          OWNER: ${{ github.repository_owner }}
 
-      - name: Upload Inventory
-        uses: actions/upload-artifact@v4
-        with:
-          name: ansible-inventory
-          path: inventory.ini
+      - name: Build CDK Docker image
+        run: docker build -t ghcr.io/${{ env.OWNER_LC }}/terraform-inventory:latest -f terraform-inventory/Dockerfile .
+
+      - name: Push CDK Docker image
+        run: docker push ghcr.io/${{ env.OWNER_LC }}/terraform-inventory:latest

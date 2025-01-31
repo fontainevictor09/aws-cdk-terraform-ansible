@@ -18,11 +18,7 @@ jobs:
     #   )           
   
   build-inventory:
-    uses: ./.github/workflows/build-inventory.yml        
-    # if: |
-    #   github.event.head_commit.modified && (
-    #     'terraform-inventory/**' in github.event.head_commit.modified
-    #   )   
+    uses: ./.github/workflows/build-inventory.yml           
 
   build-debops:
     uses: ./.github/workflows/build-debops.yml
