@@ -18,7 +18,7 @@ jobs:
           OWNER: ${{ github.repository_owner }}
 
       - name: Build & Push DebOps Docker image
-        working-directory: ${{ github.workspace }}/ansible
+        working-directory: ansible
         run: |
-          docker build -t ghcr.io/${{ env.OWNER_LC }}/debops:latest -f ansible/Dockerfile .
+          docker build -t ghcr.io/${{ env.OWNER_LC }}/debops:latest -f Dockerfile.prod .
           docker push ghcr.io/${{ env.OWNER_LC }}/debops:latest

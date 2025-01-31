@@ -19,9 +19,9 @@ jobs:
           OWNER: ${{ github.repository_owner }}
 
       - name: Build CDK Docker image
+        working-directory: terraform-inventory
         run: |
-          cd terraform-inventory
-          docker build -t ghcr.io/${{ env.OWNER_LC }}/terraform-inventory:latest -f terraform-inventory/Dockerfile .
+          docker build -t ghcr.io/${{ env.OWNER_LC }}/terraform-inventory:latest -f Dockerfile .
 
       - name: Push CDK Docker image
         run: docker push ghcr.io/${{ env.OWNER_LC }}/terraform-inventory:latest

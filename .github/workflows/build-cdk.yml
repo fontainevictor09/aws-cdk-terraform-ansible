@@ -19,11 +19,9 @@ jobs:
           OWNER: ${{ github.repository_owner }}
 
       - name: Build CDK Docker image
+        working-directory: cdk-backend
         run: |
-          pwd
-          ls -l
-          cd ./cdk-backend
-          docker build -t ghcr.io/${{ env.OWNER_LC }}/cdk-backend:latest -f cdk-backend/Dockerfile .
+          docker build -t ghcr.io/${{ env.OWNER_LC }}/cdk-backend:latest -f Dockerfile .
 
       - name: Push CDK Docker image
         run: docker push ghcr.io/${{ env.OWNER_LC }}/cdk-backend:latest
