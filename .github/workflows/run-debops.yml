@@ -16,7 +16,7 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GHCR_TOKEN }}      
       env:
-         ANSIBLE_USER_SSH_PUBLIC_KEY=${{ secrets.ANSIBLE_USER_SSH_PUBLIC_KEY }}
+         ANSIBLE_USER_SSH_PUBLIC_KEY: ${{ secrets.ANSIBLE_USER_SSH_PUBLIC_KEY }}
     steps:
       - uses: actions/checkout@v4
 
