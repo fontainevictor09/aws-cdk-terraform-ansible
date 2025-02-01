@@ -34,4 +34,5 @@ jobs:
           provenance: false
           build-args: |
             OWNER_LC=${{ inputs.owner_lc }}
-          visibility: public
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ inputs.owner_lc }}/${{ inputs.repo }}
