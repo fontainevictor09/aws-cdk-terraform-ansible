@@ -21,3 +21,11 @@ jobs:
         run: |
           docker build -t ghcr.io/${{ inputs.owner_lc }}/debops:latest -f Dockerfile.prod .
           docker push ghcr.io/${{ inputs.owner_lc }}/debops:latest
+
+      - name: Set image to public
+        run: |
+          gh api --method PATCH \
+            -H "Authorization: token ${{ secrets.GHCR_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "/user/packages/container/${{ inputs.owner_lc }}/debops/versions" \
+            -f visibility=public
