@@ -7,6 +7,12 @@ RUN apt-get update -y && apt-get install -y openssh-client git \
     libsasl2-dev libldap2-dev python3-pip \
     unzip python3-setuptools curl jq
 
+# Installer GitHub CLI
+RUN curl -fsSL https://cli.github.com/packages/githubcli-archive.key | tee /etc/apt/trusted.gpg.d/githubcli-archive.key > /dev/null \
+    && echo "deb https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list \
+    && apt-get update -y \
+    && apt-get install gh -y
+
 RUN useradd -ms /bin/bash ansible
 
 USER ansible
