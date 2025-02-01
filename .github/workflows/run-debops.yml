@@ -18,7 +18,8 @@ jobs:
       env:
          ANSIBLE_USER_SSH_PUBLIC_KEY: ${{ secrets.ANSIBLE_USER_SSH_PUBLIC_KEY }}
     steps:
-
+      - uses: actions/checkout@v4
+      
       - name: Set up SSH agent
         run: |
           # Start the SSH agent
@@ -29,6 +30,7 @@ jobs:
       - name: Prepare Ansible Configurations
         working-directory: /home/ansible/project
         run: |
+          pwd
           ls -l
           bash add_known_hosts.sh
 
