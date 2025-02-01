@@ -15,6 +15,10 @@ jobs:
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GHCR_TOKEN }}
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: ${{ vars.AWS_REGION }}  # Ajout de la région AWS        
     steps:
       - uses: actions/checkout@v4
 
@@ -25,7 +29,7 @@ jobs:
           aws configure set default.region eu-west-3
 
       - name: Bootstrap CDK (if needed)
-        run: cdk bootstrap
+        run: cdk bootstrap aws://$(aws sts get-caller-identity --query "Account" --output text)/$AWS_REGION
 
       - name: Deploy CDK Stack
         run: cdk deploy --require-approval never
