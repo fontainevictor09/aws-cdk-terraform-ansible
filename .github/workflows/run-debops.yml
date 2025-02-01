@@ -42,4 +42,7 @@ jobs:
 
       - name: Run Ansible Bootstrap
         working-directory: /home/ansible/project
-        run: ls ~/.local/share/debops/ansible/playbooks/ && debops run bootstrap -i ansible/hosts -l amazon -e 'ansible_user=admin'
+        run: |
+          echo $HOME
+          ls -la $HOME/.local/share/debops/
+          debops run bootstrap -i ansible/hosts -l amazon -e 'ansible_user=admin'
