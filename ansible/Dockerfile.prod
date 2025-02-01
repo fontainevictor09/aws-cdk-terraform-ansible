@@ -1,4 +1,4 @@
-FROM python:3.13-slim
+FROM python:3.11-slim
 
 RUN apt-get update -y && apt-get install -y openssh-client git \
     python3-future python3-ldap python3-netaddr \
