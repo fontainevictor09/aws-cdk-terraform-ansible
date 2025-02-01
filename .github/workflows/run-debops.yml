@@ -30,7 +30,8 @@ jobs:
 
       - name: Authenticate with GitHub CLI
         run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+          mkdir -p /home/ansible/.config
+          echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token --config /home/ansible/.config
 
       - name: Get artifact download URL
         run: |
