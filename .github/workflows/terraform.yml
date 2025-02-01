@@ -18,9 +18,9 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Initialize Terraform
-        working-directory: /workspace
+        working-directory: terraform/project
         run: terraform init
 
       - name: Apply Terraform
-        working-directory: /workspace
+        working-directory: terraform/project
         run: terraform apply -auto-approve
