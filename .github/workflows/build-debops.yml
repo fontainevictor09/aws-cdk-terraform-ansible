@@ -6,7 +6,10 @@ on:
       owner_lc:
         required: true
         type: string
-
+      repo_url:
+        required: true
+        type: string
+        
 jobs:
   build-debops:
     runs-on: ubuntu-latest
