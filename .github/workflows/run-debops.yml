@@ -11,7 +11,7 @@ jobs:
   debops:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/${{ inputs.owner_lc }}/debops:latest
+      image: ghcr.io/${{ inputs.owner_lc }}/ansible:latest
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GHCR_TOKEN }}      
@@ -33,8 +33,8 @@ jobs:
           name: ansible-inventory
 
       - name: Move Inventory File      
-        run: mv inventory.ini /home/ansible/project/ansible/inventory/hosts
+        run: mv inventory.ini ansible/project/ansible/inventory/hosts
 
       - name: Run Ansible Bootstrap
-        working-directory: /home/ansible/project
+        working-directory: ansible/project
         run: debops run bootstrap -i ansible/hosts -l amazon -e 'ansible_user=admin'
