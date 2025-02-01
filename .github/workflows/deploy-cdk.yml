@@ -31,5 +31,8 @@ jobs:
       - name: Bootstrap CDK (if needed)
         run: cdk bootstrap aws://$(aws sts get-caller-identity --query "Account" --output text)/$AWS_REGION
 
+      - name: Debug - Check Python
+        run: python --version
+        
       - name: Deploy CDK Stack
         run: cdk deploy --require-approval never
