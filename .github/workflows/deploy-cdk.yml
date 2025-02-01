@@ -12,14 +12,11 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/${{ inputs.owner_lc }}/cdk-backend:latest
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GHCR_TOKEN }}
     steps:
       - uses: actions/checkout@v4
-
-      - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          username: ${{ github.actor }}
-          password: ${{ secrets.GHCR_TOKEN }}      
 
       - name: Configure AWS credentials
         run: |
