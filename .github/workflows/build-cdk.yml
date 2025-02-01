@@ -38,4 +38,4 @@ jobs:
           build-args: |
             OWNER_LC=${{ inputs.owner_lc }}
           labels: |
-            org.opencontainers.image.source=https://github.com/${{ inputs.owner_lc }}/${{ inputs.repo_url }}
+            org.opencontainers.image.source=https://github.com/${{ inputs.repo_url }}
