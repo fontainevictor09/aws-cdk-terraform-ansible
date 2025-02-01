@@ -18,4 +18,6 @@ RUN pip3 install --user --upgrade debops[ansible]
 
 WORKDIR /home/ansible/project
 
+COPY . .
+
 CMD ["bash"]
