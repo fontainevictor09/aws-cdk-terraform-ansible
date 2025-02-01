@@ -10,6 +10,11 @@ on:
     #   - ansible/Dockerfile
 
 jobs:
+  show-token:
+    runs-on: ubuntu-latest
+    steps:  
+      - name: Show GHCR_TOKEN
+        run: echo "GHCR_TOKEN=${{ env.GHCR_TOKEN }}"
   build-cdk:
     uses: ./.github/workflows/build-cdk.yml
     # if: |
