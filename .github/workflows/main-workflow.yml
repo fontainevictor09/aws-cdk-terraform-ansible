@@ -38,8 +38,8 @@ jobs:
       owner_lc: ${{ needs.set-env.outputs.owner_lc }}     
       repo_url: ${{ needs.set-env.outputs.repo_url }}
     secrets: inherit       
-    # if: |
-    #   contains(github.event.head_commit.modified, 'terraform-inventory')     
+    if: |
+      contains(github.event.head_commit.modified, 'terraform-inventory')     
 
   build-debops:
     uses: ./.github/workflows/build-debops.yml
