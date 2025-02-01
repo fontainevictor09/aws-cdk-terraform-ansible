@@ -37,11 +37,19 @@ jobs:
           touch test_file
           ls -la
 
-      - name: check inventory    
-        run: ls -la /home/runner/work/_temp/
+      - name: Download Inventory using GitHub API
+        run: |
+          curl -L -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/actions/artifacts" | \
+            jq -r '.artifacts[0].archive_download_url' | \
+            xargs -I {} curl -L -o /home/ansible/ansible-inventory.zip {}
+        
+      - name: Unzip Inventory File
+        run: |
+          unzip /home/ansible/ansible-inventory.zip -d /home/ansible/
 
       - name: Move Inventory File      
-        run: cp /home/runner/work/_temp/ansible-inventory/inventory.ini /home/ansible/project/ansible/inventory/hosts
+        run: cp /home/ansible/inventory.ini /home/ansible/project/ansible/inventory/hosts
 
       - name: Prepare Ansible Configurations
         working-directory: /home/ansible/project
