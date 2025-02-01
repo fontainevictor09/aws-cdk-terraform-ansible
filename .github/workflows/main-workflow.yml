@@ -12,6 +12,8 @@ on:
 jobs:
   show-token:
     runs-on: ubuntu-latest
+    env:
+      GHCR_TOKEN: 'pouet'     
     steps:  
       - name: Show GHCR_TOKEN
         run: echo "GHCR_TOKEN=${{ env.GHCR_TOKEN }}"
