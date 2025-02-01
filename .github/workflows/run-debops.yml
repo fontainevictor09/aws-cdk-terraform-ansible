@@ -2,12 +2,16 @@ name: Run DebOps Bootstrap
 
 on:
   workflow_call:
+    inputs:
+      owner_lc:
+        required: true
+        type: string
 
 jobs:
   debops:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/${{ github.repository_owner }}/debops:latest
+      image: ghcr.io/${{ inputs.owner_lc }}/debops:latest
     steps:
       - uses: actions/checkout@v4
 

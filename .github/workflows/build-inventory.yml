@@ -2,6 +2,10 @@ name: Generate Ansible Inventory
 
 on:
   workflow_call:
+    inputs:
+      owner_lc:
+        required: true
+        type: string
 
 jobs:
   build-inventory:
@@ -13,15 +17,10 @@ jobs:
       - name: Log in to GitHub Container Registry
         run: echo ${{ secrets.GHCR_TOKEN }} | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
 
-      - name: Set lower case owner name
-        run: echo "OWNER_LC=${OWNER,,}" >> $GITHUB_ENV
-        env:
-          OWNER: ${{ github.repository_owner }}
-
       - name: Build CDK Docker image
         working-directory: terraform-inventory
         run: |
-          docker build -t ghcr.io/${{ env.OWNER_LC }}/terraform-inventory:latest -f Dockerfile .
+          docker build -t ghcr.io/${{ inputs.owner_lc }}/terraform-inventory:latest -f Dockerfile .
 
       - name: Push CDK Docker image
-        run: docker push ghcr.io/${{ env.OWNER_LC }}/terraform-inventory:latest
+        run: docker push ghcr.io/${{ inputs.owner_lc }}/terraform-inventory:latest

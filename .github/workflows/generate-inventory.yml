@@ -2,12 +2,16 @@ name: Generate Ansible Inventory
 
 on:
   workflow_call:
+    inputs:
+      owner_lc:
+        required: true
+        type: string  
 
 jobs:
   generate-inventory:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/${{ github.repository_owner }}/terraform-inventory:latest
+      image: ghcr.io/${{ inputs.owner_lc }}/terraform-inventory:latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

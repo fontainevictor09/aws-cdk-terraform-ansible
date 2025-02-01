@@ -2,12 +2,16 @@ name: Deploy CDK Stack
 
 on:
   workflow_call:
+    inputs:
+      owner_lc:
+        required: true
+        type: string
 
 jobs:
   cdk-deploy:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/${{ github.repository_owner }}/cdk-backend:latest
+      image: ghcr.io/${{ inputs.owner_lc }}/cdk-backend:latest
     steps:
       - uses: actions/checkout@v4
 
@@ -15,13 +19,7 @@ jobs:
         run: |
           aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws configure set default.region us-east-1
-
-      - name: Install CDK dependencies
-        run: |
-          cd /app
-          npm install
-          pip install -r /app/requirements.txt
+          aws configure set default.region eu-west-3
 
       - name: Bootstrap CDK (if needed)
         run: cdk bootstrap
