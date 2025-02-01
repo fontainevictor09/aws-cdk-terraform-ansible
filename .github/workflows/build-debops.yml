@@ -28,5 +28,5 @@ jobs:
         run: |
           gh api --method PATCH \
             -H "Accept: application/vnd.github.v3+json" \
-            "/user/packages/container/${{ inputs.owner_lc }}/debops/versions" \
+            "/orgs/packages/container/${{ inputs.owner_lc }}/debops/versions" \
             -f visibility=public

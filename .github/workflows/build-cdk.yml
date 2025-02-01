@@ -31,5 +31,5 @@ jobs:
         run: |
           gh api --method PATCH \
             -H "Accept: application/vnd.github.v3+json" \
-            "/user/packages/container/${{ inputs.owner_lc }}/cdk-backend/versions" \
+            "/orgs/packages/container/${{ inputs.owner_lc }}/cdk-backend/versions" \
             -f visibility=public
