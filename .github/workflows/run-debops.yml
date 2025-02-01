@@ -19,8 +19,12 @@ jobs:
          ANSIBLE_USER_SSH_PUBLIC_KEY: ${{ secrets.ANSIBLE_USER_SSH_PUBLIC_KEY }}
     steps:
 
-      - name: Set up SSH
-        run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' | ssh-add -
+      - name: Set up SSH agent
+        run: |
+          # Start the SSH agent
+          eval $(ssh-agent -s)
+          # Add the SSH private key to the agent
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' | ssh-add -
 
       - name: Prepare Ansible Configurations
         run: |
