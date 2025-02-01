@@ -12,14 +12,22 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/${{ inputs.owner_lc }}/terraform-inventory:latest
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GHCR_TOKEN }}      
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Download Terraform State
-        uses: actions/download-artifact@v4
-        with:
-          name: terraform-state
+      - name: Configure AWS credentials
+        run: |
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws configure set default.region eu-west-3
+
+      - name: Download Terraform State from S3
+        run: |
+          aws s3 cp s3://terraform-culturedevops/terraform.tfstate terraform.tfstate
 
       - name: Generate Ansible Inventory
         run: python terraform_inventory.py terraform.tfstate inventory.ini

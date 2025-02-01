@@ -12,6 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/${{ inputs.owner_lc }}/debops:latest
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GHCR_TOKEN }}      
     steps:
       - uses: actions/checkout@v4
 
@@ -20,12 +23,6 @@ jobs:
 
       - name: Prepare Ansible Configurations
         run: |
-          mkdir -p ansible/secret/pki/authorities/domain/private
-          mkdir -p ansible/secret/pki/authorities/root/private
-          echo "${{ secrets.CA_PRIVATE_KEY_CONTENT }}" > ansible/secret/pki/authorities/domain/private/key.pem
-          echo "${{ secrets.ROOT_PRIVATE_KEY_CONTENT }}" > ansible/secret/pki/authorities/root/private/key.pem
-          openssl rsa -in ansible/secret/pki/authorities/domain/private/key.pem -check -noout
-          openssl rsa -in ansible/secret/pki/authorities/root/private/key.pem -check -noout
           export ANSIBLE_CONFIG=./ansible.cfg
           export ANSIBLE_USER_SSH_PUBLIC_KEY=${{ secrets.ANSIBLE_USER_SSH_PUBLIC_KEY }}
           bash add_known_hosts.sh

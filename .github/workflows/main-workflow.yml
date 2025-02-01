@@ -63,15 +63,18 @@ jobs:
   terraform:
     uses: ./.github/workflows/terraform.yml
     needs: deploy-cdk
+    secrets: inherit
 
   generate-inventory:
     uses: ./.github/workflows/generate-inventory.yml
     needs: [terraform,set-env]
     with:
       owner_lc: ${{ needs.set-env.outputs.owner_lc }}      
+    secrets: inherit            
 
   run-debops:
     uses: ./.github/workflows/run-debops.yml
     needs: [generate-inventory,set-env]
     with:
-      owner_lc: ${{ needs.set-env.outputs.owner_lc }}      
+      owner_lc: ${{ needs.set-env.outputs.owner_lc }}    
+    secrets: inherit  

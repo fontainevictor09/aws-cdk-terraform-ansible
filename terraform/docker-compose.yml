@@ -7,5 +7,6 @@ services:
       - "./project:/workspace"
       - "~/.aws:/root/.aws"
     environment:
-      - "TF_VAR_vpc_id=vpc-0a1a939c8456f9258"
-      - "TF_VAR_ssh_key_name=MyKey"
+      #Replace by your own values or create a .env
+      - "TF_VAR_vpc_id=$TF_VAR_vpc_id"
+      - "TF_VAR_ssh_key_name=$TF_VAR_ssh_key_name"
