@@ -48,8 +48,8 @@ jobs:
       owner_lc: ${{ needs.set-env.outputs.owner_lc }}     
       repo_url: ${{ needs.set-env.outputs.repo_url }}
     secrets: inherit
-    if: |
-      contains(github.event.head_commit.modified, 'ansible/Dockerfile')
+    # if: |
+    #   contains(github.event.head_commit.modified, 'ansible/Dockerfile')
 
   # deploy-cdk:
   #   uses: ./.github/workflows/deploy-cdk.yml
@@ -63,16 +63,16 @@ jobs:
   #   needs: deploy-cdk
   #   secrets: inherit
 
-  # generate-inventory:
-  #   uses: ./.github/workflows/generate-inventory.yml
-  #   needs: [terraform,set-env]
-  #   with:
-  #     owner_lc: ${{ needs.set-env.outputs.owner_lc }}      
-  #   secrets: inherit            
+  generate-inventory:
+    uses: ./.github/workflows/generate-inventory.yml
+    needs: [terraform,set-env]
+    with:
+      owner_lc: ${{ needs.set-env.outputs.owner_lc }}      
+    secrets: inherit            
 
   run-debops:
     uses: ./.github/workflows/run-debops.yml
-    needs: [set-env]
+    needs: [generate-inventory,set-env]
     with:
       owner_lc: ${{ needs.set-env.outputs.owner_lc }}    
     secrets: inherit  
