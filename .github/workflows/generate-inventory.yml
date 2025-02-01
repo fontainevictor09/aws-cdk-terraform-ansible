@@ -14,16 +14,10 @@ jobs:
       image: ghcr.io/${{ inputs.owner_lc }}/terraform-inventory:latest
       credentials:
         username: ${{ github.actor }}
-        password: ${{ secrets.GHCR_TOKEN }}      
+        password: ${{ secrets.GHCR_TOKEN }}     
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}         
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Configure AWS credentials
-        run: |
-          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws configure set default.region eu-west-3
 
       - name: Download Terraform State from S3
         working-directory: /app
