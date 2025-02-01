@@ -8,14 +8,6 @@ on:
         type: string
 
 jobs:
-  download_artifact:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download Inventory Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: ansible-inventory
-          path: /home/runner/work/_temp/
   debops:
     runs-on: ubuntu-latest
     container:
@@ -39,9 +31,9 @@ jobs:
 
       - name: Download Inventory using GitHub API
         run: |
-          echo "Download URL: $(curl -L -H "Authorization: token ${{ secrets.GHCR_TOKEN }}" \
+          echo "Download URL: $(curl -L -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/actions/artifacts" | jq -r '.artifacts[0].archive_download_url')"        
-          curl -L -H "Authorization: token ${{ secrets.GHCR_TOKEN }}" \
+          curl -L -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/actions/artifacts" | \
             jq -r '.artifacts[0].archive_download_url' | \
             xargs -I {} curl -L -o /home/ansible/ansible-inventory.zip {}
