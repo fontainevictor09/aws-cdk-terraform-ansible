@@ -19,7 +19,9 @@ jobs:
          ANSIBLE_USER_SSH_PUBLIC_KEY: ${{ secrets.ANSIBLE_USER_SSH_PUBLIC_KEY }}
     steps:
       - uses: actions/checkout@v4
-      
+        with:
+          path: /home/ansible/project      
+
       - name: Set up SSH agent
         run: |
           # Start the SSH agent
