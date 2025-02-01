@@ -20,11 +20,19 @@ jobs:
     steps:
 
       - name: Set up SSH agent
+        working-directory: /home/ansible/project
         run: |
           # Start the SSH agent
           eval $(ssh-agent -s)
           # Add the SSH private key to the agent
           echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' | ssh-add -
+          touch test_file
+          ls -la
+
+      - name: Ensure ansible user has write permissions
+        run: |
+          sudo chown -R ansible:ansible /home/ansible
+          sudo chmod -R 755 /home/ansible
 
       - name: Download Inventory
         uses: actions/download-artifact@v4
@@ -43,6 +51,4 @@ jobs:
       - name: Run Ansible Bootstrap
         working-directory: /home/ansible/project
         run: |
-          which debops
-          pip3 show debops
           debops run bootstrap -i ansible/hosts -l amazon -e 'ansible_user=admin'
