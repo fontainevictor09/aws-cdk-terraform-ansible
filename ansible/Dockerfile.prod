@@ -9,9 +9,10 @@ RUN apt-get update -y && apt-get install -y openssh-client git \
 
 # Installer GitHub CLI
 RUN curl -fsSL https://cli.github.com/packages/githubcli-archive.key | tee /etc/apt/trusted.gpg.d/githubcli-archive.key > /dev/null \
-    && echo "deb https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list \
+    && curl -fsSL https://github.com/cli/cli/releases/download/v2.24.0/gh_2.24.0_linux_amd64.deb -o gh_2.24.0_linux_amd64.deb \
     && apt-get update -y \
-    && apt-get install gh -y
+    && apt-get install -y ./gh_2.24.0_linux_amd64.deb \
+    && rm -f gh_2.24.0_linux_amd64.deb
 
 RUN useradd -ms /bin/bash ansible
 
