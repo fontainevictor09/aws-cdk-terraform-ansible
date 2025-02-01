@@ -15,6 +15,8 @@ jobs:
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GHCR_TOKEN }}      
+      env:
+         ANSIBLE_USER_SSH_PUBLIC_KEY=${{ secrets.ANSIBLE_USER_SSH_PUBLIC_KEY }}
     steps:
       - uses: actions/checkout@v4
 
@@ -23,8 +25,6 @@ jobs:
 
       - name: Prepare Ansible Configurations
         run: |
-          export ANSIBLE_CONFIG=./ansible.cfg
-          export ANSIBLE_USER_SSH_PUBLIC_KEY=${{ secrets.ANSIBLE_USER_SSH_PUBLIC_KEY }}
           bash add_known_hosts.sh
 
       - name: Download Inventory
