@@ -58,6 +58,7 @@ jobs:
     needs: set-env
     with:
       owner_lc: ${{ needs.set-env.outputs.owner_lc }}     
+    secrets: inherit      
 
   terraform:
     uses: ./.github/workflows/terraform.yml
