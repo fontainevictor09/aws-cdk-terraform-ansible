@@ -44,5 +44,5 @@ jobs:
         working-directory: /home/ansible/project
         run: |
           echo $HOME
-          ls -la $HOME/.local/share/debops/
+          ls -la $HOME/.local/share
           debops run bootstrap -i ansible/hosts -l amazon -e 'ansible_user=admin'
