@@ -32,4 +32,4 @@ jobs:
         run: cdk bootstrap aws://$(aws sts get-caller-identity --query "Account" --output text)/$AWS_REGION
 
       - name: Deploy CDK Stack
-        run: cdk deploy --app "python cdk_backend.py" --require-approval never
+        run: pwd && ls -la && cdk deploy --app "python cdk_backend.py" --require-approval never
