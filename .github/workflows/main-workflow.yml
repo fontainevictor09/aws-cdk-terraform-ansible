@@ -10,30 +10,22 @@ on:
     #   - ansible/Dockerfile
 
 jobs:
-  login_ghcr:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        
-      - name: Show GHCR_TOKEN
-        run: echo "GHCR_TOKEN=${{ secrets.GHCR_TOKEN }}"
-
-      - name: Log in to GitHub Container Registry
-        run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
 
   build-cdk:
     uses: ./.github/workflows/build-cdk.yml
+    secrets: inherit    
     # if: |
     #   github.event.head_commit.modified && (
     #     'cdk-backend/**' in github.event.head_commit.modified
     #   )           
   
   build-inventory:
-    uses: ./.github/workflows/build-inventory.yml           
+    uses: ./.github/workflows/build-inventory.yml    
+    secrets: inherit       
 
   build-debops:
     uses: ./.github/workflows/build-debops.yml
+    secrets: inherit
     # if: |
     #   github.event.head_commit.modified && (
     #     'ansible/Dockerfile' in github.event.head_commit.modified
