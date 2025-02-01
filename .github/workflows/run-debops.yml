@@ -29,15 +29,18 @@ jobs:
           # Add the SSH private key to the agent
           echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' | ssh-add -
 
-      - name: Authenticate with GitHub CLI
+      - name: Set up GitHub CLI and authenticate
         run: |
           mkdir -p /home/ansible/.config
           export GH_CONFIG_DIR=/home/ansible/.config
-          echo "$GH_TOKEN" | gh auth login --with-token
+          unset GH_TOKEN  # Désactive temporairement GH_TOKEN pour l'authentification initiale
+          echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
 
       - name: Get artifact download URL
         run: |
-          asset=$(gh api /repos/${{ github.repository }}/actions/artifacts --jq ".artifacts[0].archive_download_url")
+          # Définit GH_TOKEN pour interagir avec l'API GitHub (nécessaire pour les requêtes)
+          echo "${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
+          asset=$(gh api /repos/CultureDevOps/aws-cdk-terraform-ansible/actions/artifacts --jq ".artifacts[0].archive_download_url")
           echo "Download URL: $asset"
 
       - name: Download artifact
