@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y \
     less \
     && curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
     && unzip awscliv2.zip \
-    && sudo ./aws/install \
+    && ./aws/install \
     && rm -rf awscliv2.zip ./aws
 
 WORKDIR /app
