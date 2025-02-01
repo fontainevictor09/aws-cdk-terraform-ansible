@@ -41,7 +41,7 @@ jobs:
         run: |
           echo "Download URL: $(curl -L -H "Authorization: token ${{ secrets.GHCR_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/actions/artifacts" | jq -r '.artifacts[0].archive_download_url')"        
-          curl -L -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          curl -L -H "Authorization: token ${{ secrets.GHCR_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/actions/artifacts" | \
             jq -r '.artifacts[0].archive_download_url' | \
             xargs -I {} curl -L -o /home/ansible/ansible-inventory.zip {}
