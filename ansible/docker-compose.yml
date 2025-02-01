@@ -3,6 +3,7 @@ services:
   ansible:
     build: 
       context: .
+      dockerfile: Dockerfile.prod
     restart: unless-stopped
     command: bash
     tty: true
