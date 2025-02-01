@@ -33,13 +33,11 @@ jobs:
           path: /home/ansible
 
       - name: Move Inventory File      
-        run: mv /home/ansible/project/inventory.ini /home/ansible/project/ansible/inventory/hosts
+        run: mv /home/ansible/inventory.ini /home/ansible/project/ansible/inventory/hosts
 
       - name: Prepare Ansible Configurations
         working-directory: /home/ansible/project
         run: |
-          pwd
-          ls -l
           bash add_known_hosts.sh
 
       - name: Run Ansible Bootstrap
