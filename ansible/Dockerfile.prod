@@ -21,4 +21,6 @@ WORKDIR /home/ansible/project
 
 COPY ./project .
 
+RUN debops-update
+
 CMD ["bash"]
