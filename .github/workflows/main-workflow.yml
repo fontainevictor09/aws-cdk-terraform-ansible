@@ -65,7 +65,7 @@ jobs:
 
   generate-inventory:
     uses: ./.github/workflows/generate-inventory.yml
-    needs: [terraform,set-env]
+    needs: [set-env]
     with:
       owner_lc: ${{ needs.set-env.outputs.owner_lc }}      
     secrets: inherit            
