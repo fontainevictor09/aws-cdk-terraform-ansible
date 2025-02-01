@@ -29,9 +29,7 @@ jobs:
       repo_url: ${{ needs.set-env.outputs.repo_url }}
     secrets: inherit    
     if: |
-      github.event.head_commit.modified && (
-        'cdk-backend/**' in github.event.head_commit.modified
-      )           
+      contains(github.event.head_commit.modified, 'cdk-backend/')     
   
   build-inventory:
     uses: ./.github/workflows/build-inventory.yml    
@@ -41,9 +39,7 @@ jobs:
       repo_url: ${{ needs.set-env.outputs.repo_url }}
     secrets: inherit       
     if: |
-      github.event.head_commit.modified && (
-        'terraform-inventory/**' in github.event.head_commit.modified
-      )    
+      contains(github.event.head_commit.modified, 'terraform-inventory/**')     
 
   build-debops:
     uses: ./.github/workflows/build-debops.yml
@@ -53,9 +49,7 @@ jobs:
       repo_url: ${{ needs.set-env.outputs.repo_url }}
     secrets: inherit
     if: |
-      github.event.head_commit.modified && (
-        'ansible/Dockerfile' in github.event.head_commit.modified
-      )
+      contains(github.event.head_commit.modified, 'ansible/Dockerfile')
 
   deploy-cdk:
     uses: ./.github/workflows/deploy-cdk.yml
