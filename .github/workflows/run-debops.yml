@@ -8,6 +8,14 @@ on:
         type: string
 
 jobs:
+  download_artifact:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Inventory Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ansible-inventory
+          path: /home/runner/work/_temp/
   debops:
     runs-on: ubuntu-latest
     container:
@@ -28,20 +36,9 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' | ssh-add -
           touch test_file
           ls -la
-
-      - name: Ensure ansible user has write permissions
-        run: |
-          chown -R ansible:ansible /home/ansible
-          chmod -R 755 /home/ansible
-
-      - name: Download Inventory
-        uses: actions/download-artifact@v4
-        with:
-          name: ansible-inventory
-          path: /home/ansible
-
+       
       - name: Move Inventory File      
-        run: mv /home/ansible/inventory.ini /home/ansible/project/ansible/inventory/hosts
+        run: cp /home/runner/work/_temp/ansible-inventory/inventory.ini /home/ansible/project/ansible/inventory/hosts
 
       - name: Prepare Ansible Configurations
         working-directory: /home/ansible/project
