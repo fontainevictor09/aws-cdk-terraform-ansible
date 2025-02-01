@@ -27,7 +27,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ansible
-          file: ansible/Dockerfile
+          file: ansible/Dockerfile.prod
           push: true
           tags: ghcr.io/${{ inputs.owner_lc }}/ansible:latest
           provenance: false
