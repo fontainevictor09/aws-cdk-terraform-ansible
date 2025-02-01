@@ -9,18 +9,16 @@ RUN apt-get update -y && apt-get install -y openssh-client git \
 
 RUN useradd -ms /bin/bash ansible
 
-# USER ansible
+USER ansible
 
 RUN mkdir -p /home/ansible/.ssh && \
     chmod 700 /home/ansible/.ssh
 
-ENV PATH=$PATH:/root/.local/bin
+ENV PATH=$PATH:/home/ansible/.local/bin
 RUN pip3 install --upgrade debops[ansible]
 
 WORKDIR /home/ansible/project
 
 COPY ./project .
-
-RUN debops-update
 
 CMD ["bash"]
