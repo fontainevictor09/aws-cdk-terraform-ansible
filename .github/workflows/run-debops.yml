@@ -29,6 +29,7 @@ jobs:
       - name: Prepare Ansible Configurations
         working-directory: /home/ansible/project
         run: |
+          ls -l
           bash add_known_hosts.sh
 
       - name: Download Inventory
