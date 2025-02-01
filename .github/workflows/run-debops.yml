@@ -16,7 +16,9 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GHCR_TOKEN }}      
       env:
-         ANSIBLE_USER_SSH_PUBLIC_KEY: ${{ secrets.ANSIBLE_USER_SSH_PUBLIC_KEY }}
+        ANSIBLE_USER_SSH_PUBLIC_KEY: ${{ secrets.ANSIBLE_USER_SSH_PUBLIC_KEY }}
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     steps:
 
       - name: Set up SSH agent
@@ -26,10 +28,10 @@ jobs:
           eval $(ssh-agent -s)
           # Add the SSH private key to the agent
           echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' | ssh-add -
-          
+
       - name: Authenticate with GitHub CLI
         run: |
-          gh auth login --with-token <<< "${{ secrets.GITHUB_TOKEN }}"
+          echo "$GH_TOKEN" | gh auth login --with-token
 
       - name: Get artifact download URL
         run: |
