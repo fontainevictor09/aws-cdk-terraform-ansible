@@ -25,7 +25,7 @@ jobs:
       - name: Set image to public
         run: |
           gh api --method PATCH \
-            -H "Authorization: token ${{ secrets.GHCR_TOKEN }}" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             -H "Accept: application/vnd.github.v3+json" \
             "/user/packages/container/${{ inputs.owner_lc }}/debops/versions" \
             -f visibility=public
