@@ -36,7 +36,10 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' | ssh-add -
           touch test_file
           ls -la
-       
+
+      - name: check inventory    
+        run: ls -la /home/runner/work/_temp/
+
       - name: Move Inventory File      
         run: cp /home/runner/work/_temp/ansible-inventory/inventory.ini /home/ansible/project/ansible/inventory/hosts
 
