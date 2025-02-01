@@ -39,6 +39,8 @@ jobs:
 
       - name: Download Inventory using GitHub API
         run: |
+          echo "Download URL: $(curl -L -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/actions/artifacts" | jq -r '.artifacts[0].archive_download_url')"        
           curl -L -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/actions/artifacts" | \
             jq -r '.artifacts[0].archive_download_url' | \
@@ -46,6 +48,7 @@ jobs:
         
       - name: Unzip Inventory File
         run: |
+          head -n 10 /home/ansible/ansible-inventory.zip
           unzip /home/ansible/ansible-inventory.zip -d /home/ansible/
 
       - name: Move Inventory File      
