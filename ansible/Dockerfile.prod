@@ -9,7 +9,7 @@ RUN apt-get update -y && apt-get install -y openssh-client git \
 
 RUN useradd -ms /bin/bash ansible
 
-USER ansible
+# USER ansible
 
 RUN mkdir -p /home/ansible/.ssh && \
     chmod 700 /home/ansible/.ssh
