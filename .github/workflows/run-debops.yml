@@ -27,6 +27,7 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' | ssh-add -
 
       - name: Prepare Ansible Configurations
+        working-directory: /home/ansible/project
         run: |
           bash add_known_hosts.sh
 
