@@ -32,8 +32,9 @@ jobs:
         with:
           name: ansible-inventory
 
-      - name: Move Inventory File
-        run: mv inventory.ini ansible/hosts
+      - name: Move Inventory File      
+        run: mv inventory.ini /home/ansible/project/ansible/inventory/hosts
 
       - name: Run Ansible Bootstrap
+        working-directory: /home/ansible/project
         run: debops run bootstrap -i ansible/hosts -l amazon -e 'ansible_user=admin'

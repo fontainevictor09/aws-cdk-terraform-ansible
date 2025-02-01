@@ -26,14 +26,16 @@ jobs:
           aws configure set default.region eu-west-3
 
       - name: Download Terraform State from S3
+        working-directory: /app
         run: |
           aws s3 cp s3://terraform-culturedevops/terraform.tfstate terraform.tfstate
 
       - name: Generate Ansible Inventory
+        working-directory: /app
         run: python terraform_inventory.py terraform.tfstate inventory.ini
 
       - name: Upload Inventory
         uses: actions/upload-artifact@v4
         with:
           name: ansible-inventory
-          path: inventory.ini
+          path: /app/inventory.ini

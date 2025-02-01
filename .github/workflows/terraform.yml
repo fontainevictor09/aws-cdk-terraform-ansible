@@ -18,13 +18,9 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Initialize Terraform
+        working-directory: /workspace
         run: terraform init
 
       - name: Apply Terraform
+        working-directory: /workspace
         run: terraform apply -auto-approve
-
-      - name: Upload Terraform State
-        uses: actions/upload-artifact@v4
-        with:
-          name: terraform-state
-          path: terraform.tfstate
