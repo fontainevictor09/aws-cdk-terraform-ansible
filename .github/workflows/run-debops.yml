@@ -26,13 +26,6 @@ jobs:
           # Add the SSH private key to the agent
           echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' | ssh-add -
 
-      - name: Prepare Ansible Configurations
-        working-directory: /home/ansible/project
-        run: |
-          pwd
-          ls -l
-          bash add_known_hosts.sh
-
       - name: Download Inventory
         uses: actions/download-artifact@v4
         with:
@@ -41,6 +34,13 @@ jobs:
       - name: Move Inventory File      
         run: mv inventory.ini /home/ansible/project/ansible/inventory/hosts
 
+      - name: Prepare Ansible Configurations
+        working-directory: /home/ansible/project
+        run: |
+          pwd
+          ls -l
+          bash add_known_hosts.sh
+          
       - name: Run Ansible Bootstrap
         working-directory: /home/ansible/project
         run: debops run bootstrap -i ansible/hosts -l amazon -e 'ansible_user=admin'
