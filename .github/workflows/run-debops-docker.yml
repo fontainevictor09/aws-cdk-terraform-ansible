@@ -56,6 +56,10 @@ jobs:
           debops config list
           find $HOME -type d -name "debops" 2>/dev/null
 
+      - name: Ensure DebOps Roles and Playbooks Are Installed
+        run: |
+          ansible-galaxy collection install debops.debops --force          
+
       - name: Run Ansible Bootstrap
         working-directory: ansible/project
         run: |
