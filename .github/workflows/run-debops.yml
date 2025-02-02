@@ -65,7 +65,9 @@ jobs:
       - name: Run Ansible Bootstrap
         working-directory: /home/ansible/project
         run: |
-          ls -la
+          ls -la /github/home/
+          ls -la /github/home/.cache/
+          ls -la /github/home/.cache/pip
           pwd
           pip3 show debops
           which debops
