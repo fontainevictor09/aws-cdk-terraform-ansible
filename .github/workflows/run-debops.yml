@@ -29,7 +29,7 @@ jobs:
       env:
          ANSIBLE_USER_SSH_PUBLIC_KEY: ${{ secrets.ANSIBLE_USER_SSH_PUBLIC_KEY }}
       volumes:
-        - "/home/runner/work/_temp/ansible-inventory:/home/ansible/ansible-inventory"
+        - "/home/runner/work/_temp/inventory.ini:/home/ansible/project/ansible/inventory/hosts"
     steps:
 
       - name: Set up SSH agent
@@ -39,15 +39,10 @@ jobs:
           eval $(ssh-agent -s)
           # Add the SSH private key to the agent
           echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' | ssh-add -
-
-      # - name: Copy Inventory to Container
-      #   run: |
-      #     cp /home/runner/work/_temp/ansible-inventory/* /home/ansible/
         
-      - name: Move Inventory File      
+      - name: Check Inventory File      
         run: |
-          ls -la /home/ansible/ansible-inventory/
-          mv /home/ansible/ansible-inventory/inventory.ini /home/ansible/project/ansible/inventory/hosts
+          cat /home/ansible/project/ansible/inventory/hosts
 
       - name: Prepare Ansible Configurations
         working-directory: /home/ansible/project
