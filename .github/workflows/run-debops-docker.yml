@@ -22,7 +22,6 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Set up SSH agent
-        working-directory: /home/ansible/project
         run: |
           # Start the SSH agent
           eval $(ssh-agent -s)
