@@ -47,15 +47,13 @@ jobs:
 
       - name: Move Inventory File      
         run: |
-          ls -l
-          pwd
-          cat inventory.ini
-          mkdir -p ./ansible/inventory/
-          mv inventory.ini ./ansible/inventory/hosts
+          mv inventory.ini ./ansible/project/ansible/inventory/hosts
 
       - name: Prepare Ansible Configurations
         working-directory: ansible/project
         run: |
+          pwd
+          ls -la
           bash add_known_hosts.sh
 
       - name: Run Ansible Bootstrap
