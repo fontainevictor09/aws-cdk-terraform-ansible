@@ -9,7 +9,7 @@ on:
 
 jobs:
   debops:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     env:
       ANSIBLE_USER_SSH_PUBLIC_KEY: ${{ secrets.ANSIBLE_USER_SSH_PUBLIC_KEY }}
       ANSIBLE_CONFIG: ./ansible.cfg
