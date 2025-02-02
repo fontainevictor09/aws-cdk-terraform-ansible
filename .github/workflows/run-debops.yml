@@ -36,8 +36,6 @@ jobs:
           which apk || echo "apk not found"          
       - name: Install System Dependencies
         run: |
-          apt update -y 
-          apt install -y sudo
           sudo apt-get update -y
           sudo apt-get install -y openssh-client git \
             python3-future python3-ldap python3-netaddr \
