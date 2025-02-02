@@ -29,6 +29,12 @@ jobs:
           # Add the SSH private key to the agent
           echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' | ssh-add -
 
+      - name: Set up SSH agent
+        working-directory: ansible/project
+        run: |
+            pip3 install --upgrade debops[ansible]
+            PATH=$PATH:$HOME/.local/bin
+
       - name: Download Inventory Artifact
         uses: actions/download-artifact@v4
         with:
