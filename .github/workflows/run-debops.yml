@@ -58,4 +58,5 @@ jobs:
           pwd
           pip3 show debops
           which debops
+          ls -la /__w/aws-cdk-terraform-ansible/aws-cdk-terraform-ansible/
           debops run bootstrap -l amazon
