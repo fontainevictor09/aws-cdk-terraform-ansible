@@ -45,7 +45,9 @@ jobs:
                 unzip python3-setuptools curl jq
             pip3 install --upgrade debops[ansible]
             PATH=$PATH:$HOME/.local/bin
+            echo $HOME
             pip3 show debops
+            debops run bootstrap -l amazon
 
       - name: Move Inventory File      
         run: |
