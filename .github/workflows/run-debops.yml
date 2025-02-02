@@ -19,6 +19,7 @@ jobs:
       - name: Check Inventory File      
         run: |
           ls -la /home/runner/work/_temp/        
+          cat /home/runner/work/_temp/inventory.ini
   debops:
     runs-on: ubuntu-latest
     container:
