@@ -21,7 +21,7 @@ RUN useradd -ms /bin/bash ansible
 # RUN mkdir -p /home/ansible/.ssh && \
 #     chmod 700 /home/ansible/.ssh
 
-ENV PATH=$PATH:/home/ansible/.local/bin
+ENV PATH=$PATH:/home/ansible/.local/bin:/home/runner/.local/bin:$PATH
 RUN pip3 install --upgrade debops[ansible]
 
 WORKDIR /home/ansible/project
