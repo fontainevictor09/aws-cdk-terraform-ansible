@@ -63,10 +63,9 @@ jobs:
           debops config list
           find $HOME -type d -name "debops" 2>/dev/null
 
-      # - name: Ensure DebOps Roles and Playbooks Are Installed
-      #   run: |
-      #     debops install || echo "DebOps install failed"
-      #     ansible-galaxy collection install debops.debops --force
+      - name: Ensure DebOps Roles and Playbooks Are Installed
+        run: |
+          ansible-galaxy collection install debops.debops --force
 
       # - name: Debug DebOps Installation
       #   run: |
@@ -76,10 +75,5 @@ jobs:
 
       - name: Run Ansible Bootstrap
         working-directory: ansible/project
-        run: |
-          pwd
-          ls -lah /home/runner/.local/share/containers/storage/
-          which debops
-          export ANSIBLE_ROLES_PATH="$HOME/.local/share/debops/ansible/roles"
-          export PATH="$HOME/.local/bin:$PATH"          
+        run: |  
           debops run bootstrap -l amazon
