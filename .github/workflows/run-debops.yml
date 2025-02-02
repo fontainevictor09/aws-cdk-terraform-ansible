@@ -56,10 +56,12 @@ jobs:
           ls -la
           bash add_known_hosts.sh
 
-      - name: Ensure DebOps is initialized
-        working-directory: ansible/project
+      - name: Debug DebOps Files
         run: |
-          debops project init || echo "DebOps project already initialized"
+          echo "Checking DebOps paths..."
+          debops --version
+          debops config
+          find $HOME -type d -name "debops" 2>/dev/null
 
       - name: Run Ansible Bootstrap
         working-directory: ansible/project
