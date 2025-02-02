@@ -48,6 +48,9 @@ jobs:
           mkdir -p $HOME/.ssh
           bash add_known_hosts.sh
 
+      - name: Display known_hosts
+        run: cat $HOME/.ssh/known_hosts
+
       - name: Install DebOps
         run: |
           pip3 install --upgrade debops[ansible]
@@ -68,5 +71,5 @@ jobs:
       - name: Run Ansible Bootstrap
         working-directory: ansible/project
         run: |
-          ssh -i $HOME/.ssh/id_rsa admin@51.44.7.124
+          ssh -o StrictHostKeyChecking=no -i $HOME/.ssh/id_rsa admin@51.44.7.124
           debops run bootstrap -l amazon
