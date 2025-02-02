@@ -1,0 +1,59 @@
+name: Run DebOps Bootstrap
+
+on:
+  workflow_call:
+    inputs:
+      owner_lc:
+        required: true
+        type: string
+
+jobs:
+  debops:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/${{ inputs.owner_lc }}/ansible:latest
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GHCR_TOKEN }}      
+      env:
+         ANSIBLE_USER_SSH_PUBLIC_KEY: ${{ secrets.ANSIBLE_USER_SSH_PUBLIC_KEY }}
+         ANSIBLE_CONFIG: ./ansible.cfg
+         PATH: /home/runner/.local/bin:$PATH
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up SSH agent
+        working-directory: /home/ansible/project
+        run: |
+          # Start the SSH agent
+          eval $(ssh-agent -s)
+          # Add the SSH private key to the agent
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' | ssh-add -
+
+      - name: Download Inventory Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ansible-inventory
+
+      - name: Move Inventory File      
+        run: |
+          ls -l 
+          pwd
+          cat inventory.ini
+          mv inventory.ini /home/ansible/project/ansible/inventory/hosts
+
+      - name: Prepare Ansible Configurations
+        working-directory: /home/ansible/project
+        run: |
+          bash add_known_hosts.sh
+
+      - name: Run Ansible Bootstrap
+        working-directory: /home/ansible/project
+        run: |
+          ls -la /github/home/
+          ls -la /github/home/.cache/
+          ls -la /github/home/.cache/pip
+          pwd
+          pip3 show debops
+          which debops
+          debops run bootstrap -l amazon
