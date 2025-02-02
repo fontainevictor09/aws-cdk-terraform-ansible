@@ -76,4 +76,4 @@ jobs:
       - name: Run Ansible Bootstrap
         working-directory: ansible/project
         run: |  
-          debops run bootstrap -l amazon
+          debops run bootstrap -l amazon ansible_ssh_common_args='-o StrictHostKeyChecking=no'
