@@ -19,8 +19,8 @@ jobs:
 
       - name: Install System Dependencies
         run: |
-          sudo apt-get update -y
-          sudo apt-get install -y openssh-client git \
+          apt-get update -y
+          apt-get install -y openssh-client git \
             python3-future python3-ldap python3-netaddr \
             python3-dnspython python3-passlib python3-toml \
             build-essential python3-dev libffi-dev libssl-dev \
