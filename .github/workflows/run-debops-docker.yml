@@ -37,23 +37,20 @@ jobs:
 
       - name: Move Inventory File      
         run: |
-          ls -l 
-          pwd
-          cat inventory.ini
-          mv inventory.ini /home/ansible/project/ansible/inventory/hosts
+          mv inventory.ini ansible/project/ansible/inventory/hosts
 
       - name: Prepare Ansible Configurations
-        working-directory: /home/ansible/project
+        working-directory: ansible/project
         run: |
           bash add_known_hosts.sh
 
-      - name: Run Ansible Bootstrap
-        working-directory: /home/ansible/project
+      - name: Install DebOps
         run: |
-          ls -la /github/home/
-          ls -la /github/home/.cache/
-          ls -la /github/home/.cache/pip
-          pwd
-          pip3 show debops
-          which debops
+          pip3 install --upgrade debops[ansible]
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          debops --version
+
+      - name: Run Ansible Bootstrap
+        working-directory: ansible/project
+        run: |
           debops run bootstrap -l amazon
