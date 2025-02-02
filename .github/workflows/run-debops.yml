@@ -67,4 +67,6 @@ jobs:
           pwd
           ls -lah
           which debops
+          export ANSIBLE_ROLES_PATH="$HOME/.local/share/debops/ansible/roles"
+          export PATH="$HOME/.local/bin:$PATH"          
           debops run bootstrap -l amazon
