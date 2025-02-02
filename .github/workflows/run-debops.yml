@@ -41,14 +41,21 @@ jobs:
           # Add the SSH private key to the agent
           echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' | ssh-add -
 
-      - name: Download Inventory using GitHub API
+      - name: Get Inventory Artifact URL
         run: |
-          echo "Download URL: $(curl -L -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/repos/${{ github.repository }}/actions/artifacts" | jq -r '.artifacts[0].archive_download_url')"        
-          curl -L -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          ARTIFACT_URL=$(curl -s -L -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/actions/artifacts" | \
-            jq -r '.artifacts[0].archive_download_url' | \
-            xargs -I {} curl -L -o /home/ansible/ansible-inventory.zip {}
+            jq -r '.artifacts[] | select(.name=="ansible-inventory").archive_download_url')
+
+          echo "Download URL: $ARTIFACT_URL"
+          echo "ARTIFACT_URL=$ARTIFACT_URL" >> $GITHUB_ENV
+
+      - name: Download and Extract Inventory
+        run: |
+          curl -s -L -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -o /home/ansible/ansible-inventory.zip \
+            "$ARTIFACT_URL"
+
+          unzip -o /home/ansible/ansible-inventory.zip -d /home/ansible/
 
       - name: Move Inventory File      
         run: |
