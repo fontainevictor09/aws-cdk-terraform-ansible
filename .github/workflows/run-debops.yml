@@ -28,27 +28,33 @@ jobs:
           # Add the SSH private key to the agent
           echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' | ssh-add -
 
-      - name: Get Inventory Artifact URL
-        run: |
-          ARTIFACT_URL=$(curl -s -L -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/repos/${{ github.repository }}/actions/artifacts" | \
-            jq -r '.artifacts[] | select(.name=="ansible-inventory").archive_download_url')
+      - name: Download Inventory Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ansible-inventory
 
-          echo "Download URL: $ARTIFACT_URL"
-          echo "ARTIFACT_URL=$ARTIFACT_URL" >> $GITHUB_ENV
+      # - name: Get Inventory Artifact URL
+      #   run: |
+      #     ARTIFACT_URL=$(curl -s -L -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+      #       "https://api.github.com/repos/${{ github.repository }}/actions/artifacts" | \
+      #       jq -r '.artifacts[] | select(.name=="ansible-inventory").archive_download_url')
 
-      - name: Download and Extract Inventory
-        run: |
-          curl -s -L -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -o /home/ansible/ansible-inventory.zip \
-            "$ARTIFACT_URL"
+      #     echo "Download URL: $ARTIFACT_URL"
+      #     echo "ARTIFACT_URL=$ARTIFACT_URL" >> $GITHUB_ENV
 
-          unzip -o /home/ansible/ansible-inventory.zip -d /home/ansible/
+      # - name: Download and Extract Inventory
+      #   run: |
+      #     curl -s -L -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -o /home/ansible/ansible-inventory.zip \
+      #       "$ARTIFACT_URL"
+
+      #     unzip -o /home/ansible/ansible-inventory.zip -d /home/ansible/
 
       - name: Move Inventory File      
         run: |
-          ls -l /home/ansible
-          cat /home/ansible/inventory/inventory.ini
-          mv /home/ansible/inventory.ini /home/ansible/project/ansible/inventory/hosts
+          ls -l 
+          pwd
+          cat inventory.ini
+          mv inventory.ini ansible/project/ansible/inventory/hosts
 
       - name: Prepare Ansible Configurations
         working-directory: /home/ansible/project
