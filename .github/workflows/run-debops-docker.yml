@@ -18,7 +18,6 @@ jobs:
       env:
          ANSIBLE_USER_SSH_PUBLIC_KEY: ${{ secrets.ANSIBLE_USER_SSH_PUBLIC_KEY }}
          ANSIBLE_CONFIG: ./ansible.cfg
-         PATH: /home/runner/.local/bin:$PATH
     steps:
       - uses: actions/checkout@v4
 
