@@ -29,16 +29,23 @@ jobs:
           # Add the SSH private key to the agent
           echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' | ssh-add -
 
-      - name: Set up SSH agent
-        working-directory: ansible/project
-        run: |
-            pip3 install --upgrade debops[ansible]
-            PATH=$PATH:$HOME/.local/bin
-
       - name: Download Inventory Artifact
         uses: actions/download-artifact@v4
         with:
           name: ansible-inventory
+
+      - name: Install packages
+        working-directory: ansible/project
+        run: |
+            apt-get update -y && apt-get install -y openssh-client git \
+                python3-future python3-ldap python3-netaddr \
+                python3-dnspython python3-passlib python3-toml \
+                build-essential python3-dev libffi-dev libssl-dev \
+                libsasl2-dev libldap2-dev python3-pip \
+                unzip python3-setuptools curl jq
+            pip3 install --upgrade debops[ansible]
+            PATH=$PATH:$HOME/.local/bin
+            pip3 show debops
 
       - name: Move Inventory File      
         run: |
