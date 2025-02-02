@@ -64,4 +64,6 @@ jobs:
       - name: Run Ansible Bootstrap
         working-directory: ansible/project
         run: |
-          debops run bootstrap -i ansible/hosts -l amazon -e 'ansible_user=admin'
+          ls -l
+          pwd
+          debops run bootstrap -l amazon -e 'ansible_user=admin'
