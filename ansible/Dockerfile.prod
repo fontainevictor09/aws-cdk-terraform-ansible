@@ -7,21 +7,15 @@ RUN apt-get update -y && apt-get install -y openssh-client git \
     libsasl2-dev libldap2-dev python3-pip \
     unzip python3-setuptools curl jq
 
-# Installer GitHub CLI
-# RUN curl -fsSL https://cli.github.com/packages/githubcli-archive.key | tee /etc/apt/trusted.gpg.d/githubcli-archive.key > /dev/null \
-#     && curl -fsSL https://github.com/cli/cli/releases/download/v2.24.0/gh_2.24.0_linux_amd64.deb -o gh_2.24.0_linux_amd64.deb \
-#     && apt-get update -y \
-#     && apt-get install -y ./gh_2.24.0_linux_amd64.deb \
-#     && rm -f gh_2.24.0_linux_amd64.deb
-
 RUN useradd -ms /bin/bash ansible
-
+WORKDIR /home/ansible
 # USER ansible
 
 # RUN mkdir -p /home/ansible/.ssh && \
 #     chmod 700 /home/ansible/.ssh
 
 # ENV PATH=$PATH:/home/ansible/.local/bin:/home/runner/.local/bin:$PATH
+ENV PATH=/home/runner/.local/bin:$PATH
 # RUN pip3 install --upgrade debops[ansible]
 
 WORKDIR /home/ansible/project
