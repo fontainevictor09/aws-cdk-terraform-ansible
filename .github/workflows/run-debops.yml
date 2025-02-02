@@ -65,7 +65,7 @@ jobs:
         working-directory: ansible/project
         run: |
           pwd
-          ls -lah /home/runner/.local/
+          ls -lah /home/runner/.local/share/
           which debops
           export ANSIBLE_ROLES_PATH="$HOME/.local/share/debops/ansible/roles"
           export PATH="$HOME/.local/bin:$PATH"          
