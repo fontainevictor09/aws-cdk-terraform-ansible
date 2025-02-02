@@ -60,7 +60,8 @@ jobs:
         run: |
           echo "Checking DebOps paths..."
           debops --version
-          debops config
+          debops config get
+          debops config list
           find $HOME -type d -name "debops" 2>/dev/null
 
       - name: Run Ansible Bootstrap
