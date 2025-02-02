@@ -10,14 +10,19 @@ on:
 jobs:
   debops:
     runs-on: ubuntu-latest
-    container:
-      image: ubuntu:22.04    
     env:
       ANSIBLE_USER_SSH_PUBLIC_KEY: ${{ secrets.ANSIBLE_USER_SSH_PUBLIC_KEY }}
       ANSIBLE_CONFIG: ./ansible.cfg
       PATH: /home/runner/.local/bin:$PATH
 
     steps:
+      - name: Check if running inside a container
+        run: |
+          if [ -f /.dockerenv ]; then
+            echo "Running inside a Docker container!"
+          else
+            echo "Running on a full VM."
+          fi    
       - name: Install System Dependencies
         run: |
           apt update -y 
