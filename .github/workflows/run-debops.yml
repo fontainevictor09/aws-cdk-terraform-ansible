@@ -52,6 +52,7 @@ jobs:
       - name: Prepare Ansible Configurations
         working-directory: ansible/project
         run: |
+          mkdir -p $HOME/.ssh
           echo "$HOME/.ssh/known_hosts"
           bash add_known_hosts.sh
 
