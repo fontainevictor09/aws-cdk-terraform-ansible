@@ -31,7 +31,7 @@ jobs:
 
       - name: Install DebOps
         run: |
-          pip3 install --user --upgrade debops[ansible]
+          pip3 install --upgrade debops[ansible]
           echo "$HOME/.local/bin" >> $GITHUB_PATH
           debops --version
 
