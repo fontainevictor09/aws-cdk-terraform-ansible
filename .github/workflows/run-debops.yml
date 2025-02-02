@@ -57,11 +57,11 @@ jobs:
           mv inventory.ini ansible/project/ansible/inventory/hosts
 
       - name: Prepare Ansible Configurations
-        working-directory: /home/ansible/project
+        working-directory: ansible/project
         run: |
           bash add_known_hosts.sh
 
       - name: Run Ansible Bootstrap
-        working-directory: /home/ansible/project
+        working-directory: ansible/project
         run: |
           debops run bootstrap -i ansible/hosts -l amazon -e 'ansible_user=admin'
