@@ -31,6 +31,7 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > $HOME/.ssh/id_rsa
           chmod 600 $HOME/.ssh/id_rsa
           ssh-add $HOME/.ssh/id_rsa
+          head -n 10 $HOME/.ssh/id_rsa
 
       - name: Download Inventory Artifact
         uses: actions/download-artifact@v4
