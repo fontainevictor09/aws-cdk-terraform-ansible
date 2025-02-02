@@ -8,18 +8,6 @@ on:
         type: string
 
 jobs:
-  download_artifact:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download Inventory Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: ansible-inventory
-          path: /home/runner/work/_temp/
-      - name: Check Inventory File      
-        run: |
-          ls -la /home/runner/work/_temp/        
-          cat /home/runner/work/_temp/inventory.ini
   debops:
     runs-on: ubuntu-latest
     container:
@@ -29,12 +17,11 @@ jobs:
         password: ${{ secrets.GHCR_TOKEN }}      
       env:
          ANSIBLE_USER_SSH_PUBLIC_KEY: ${{ secrets.ANSIBLE_USER_SSH_PUBLIC_KEY }}
-      volumes:
-        - "/home/runner/work/_temp/:/home/ansible/inventory"
     steps:
+      - uses: actions/checkout@v4
 
       - name: Set up SSH agent
-        working-directory: /home/ansible/project
+        working-directory: ansible/project
         run: |
           # Start the SSH agent
           eval $(ssh-agent -s)
