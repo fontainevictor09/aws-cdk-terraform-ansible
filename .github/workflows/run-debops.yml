@@ -19,10 +19,10 @@ jobs:
          ANSIBLE_USER_SSH_PUBLIC_KEY: ${{ secrets.ANSIBLE_USER_SSH_PUBLIC_KEY }}
          ANSIBLE_CONFIG: ./ansible.cfg
     steps:
-      - uses: actions/checkout@v4
+      # - uses: actions/checkout@v4
 
       - name: Set up SSH agent
-        working-directory: ansible/project
+        working-directory: /home/ansible/project
         run: |
           # Start the SSH agent
           eval $(ssh-agent -s)
@@ -55,15 +55,15 @@ jobs:
           ls -l 
           pwd
           cat inventory.ini
-          mv inventory.ini ansible/project/ansible/inventory/hosts
+          mv inventory.ini /home/ansible/project/ansible/inventory/hosts
 
       - name: Prepare Ansible Configurations
-        working-directory: ansible/project
+        working-directory: /home/ansible/project
         run: |
           bash add_known_hosts.sh
 
       - name: Run Ansible Bootstrap
-        working-directory: ansible/project
+        working-directory: /home/ansible/project
         run: |
           ls -la
           pwd
