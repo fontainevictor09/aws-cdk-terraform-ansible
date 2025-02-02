@@ -49,6 +49,13 @@ jobs:
           echo "$HOME/.local/bin" >> $GITHUB_PATH
           debops --version
 
+      - name: Debug DebOps Files
+        run: |
+          echo "Checking DebOps paths..."
+          debops config get
+          debops config list
+          find $HOME -type d -name "debops" 2>/dev/null
+
       - name: Run Ansible Bootstrap
         working-directory: ansible/project
         run: |
