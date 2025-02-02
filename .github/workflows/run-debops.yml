@@ -8,6 +8,14 @@ on:
         type: string
 
 jobs:
+  download_artifact:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Inventory Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ansible-inventory
+          path: /home/runner/work/_temp/
   debops:
     runs-on: ubuntu-latest
     container:
@@ -16,9 +24,9 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GHCR_TOKEN }}      
       env:
-        ANSIBLE_USER_SSH_PUBLIC_KEY: ${{ secrets.ANSIBLE_USER_SSH_PUBLIC_KEY }}
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+         ANSIBLE_USER_SSH_PUBLIC_KEY: ${{ secrets.ANSIBLE_USER_SSH_PUBLIC_KEY }}
+      volumes:
+        - "/home/runner/work/_temp/ansible-inventory:/home/ansible/"
     steps:
 
       - name: Set up SSH agent
@@ -29,33 +37,14 @@ jobs:
           # Add the SSH private key to the agent
           echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' | ssh-add -
 
-      - name: Set up GitHub CLI and authenticate
-        run: |
-          mkdir -p /home/ansible/.config
-          export GH_CONFIG_DIR=/home/ansible/.config
-          unset GH_TOKEN  # Désactive temporairement GH_TOKEN pour l'authentification initiale
-          echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
-
-      - name: Get artifact download URL
-        run: |
-          # Définit GH_TOKEN pour interagir avec l'API GitHub (nécessaire pour les requêtes)
-          echo "${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
-          asset=$(gh api /repos/CultureDevOps/aws-cdk-terraform-ansible/actions/artifacts --jq ".artifacts[0].archive_download_url")
-          echo "Download URL: $asset"
-
-      - name: Download artifact
-        run: |
-          curl -L -o /home/ansible/ansible-inventory.zip "$asset" \
-            -H "Accept: application/vnd.github.v3+json" \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}"
+      # - name: Copy Inventory to Container
+      #   run: |
+      #     cp /home/runner/work/_temp/ansible-inventory/* /home/ansible/
         
-      - name: Unzip Inventory File
-        run: |
-          head -n 10 /home/ansible/ansible-inventory.zip
-          unzip /home/ansible/ansible-inventory.zip -d /home/ansible/
-
       - name: Move Inventory File      
-        run: cp /home/ansible/inventory.ini /home/ansible/project/ansible/inventory/hosts
+        run: |
+          ls -l /home/ansible/
+          mv /home/ansible/inventory.ini /home/ansible/project/ansible/inventory/hosts
 
       - name: Prepare Ansible Configurations
         working-directory: /home/ansible/project
