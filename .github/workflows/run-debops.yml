@@ -18,7 +18,7 @@ jobs:
           path: /home/runner/work/_temp/
       - name: Check Inventory File      
         run: |
-          ls -la /home/runner/work/_temp/ansible-inventory/        
+          ls -la /home/runner/work/_temp/        
   debops:
     runs-on: ubuntu-latest
     container:
