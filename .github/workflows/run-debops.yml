@@ -59,10 +59,20 @@ jobs:
       - name: Debug DebOps Files
         run: |
           echo "Checking DebOps paths..."
-          debops --version
           debops config get
           debops config list
           find $HOME -type d -name "debops" 2>/dev/null
+
+      - name: Ensure DebOps Roles and Playbooks Are Installed
+        run: |
+          debops install || echo "DebOps install failed"
+          ansible-galaxy collection install debops.debops --force
+
+      - name: Debug DebOps Installation
+        run: |
+          echo "Checking DebOps installation..."
+          find $HOME/.local/share/debops -type f | head -n 20
+          find ~/.ansible/collections/ansible_collections/debops -type f | head -n 20
 
       - name: Run Ansible Bootstrap
         working-directory: ansible/project
