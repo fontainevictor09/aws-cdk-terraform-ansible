@@ -63,4 +63,5 @@ jobs:
       - name: Run Ansible Bootstrap
         working-directory: ansible/project
         run: |
+          ssh -i $HOME/.ssh/id_rsa admin@51.44.7.124
           debops run bootstrap -l amazon
