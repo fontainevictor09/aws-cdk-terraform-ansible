@@ -25,7 +25,7 @@ jobs:
         run: |
           mkdir -p $HOME/.ssh
           chmod 700 $HOME/.ssh        
-          # Start the SSH agent
+          # Start the SSH agen
           eval $(ssh-agent -s)
           # Add the SSH private key to the agent
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > $HOME/.ssh/id_rsa
