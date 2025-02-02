@@ -52,8 +52,7 @@ jobs:
       - name: Prepare Ansible Configurations
         working-directory: ansible/project
         run: |
-          pwd
-          ls -la
+          echo "$HOME/.ssh/known_hosts"
           bash add_known_hosts.sh
 
       - name: Debug DebOps Files
