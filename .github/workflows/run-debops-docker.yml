@@ -26,7 +26,9 @@ jobs:
           # Start the SSH agent
           eval $(ssh-agent -s)
           # Add the SSH private key to the agent
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' | ssh-add -
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > $HOME/.ssh/id_rsa
+          chmod 600 $HOME/.ssh/id_rsa
+          ssh-add $HOME/.ssh/id_rsa
 
       - name: Download Inventory Artifact
         uses: actions/download-artifact@v4
