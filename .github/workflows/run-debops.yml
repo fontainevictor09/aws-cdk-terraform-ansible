@@ -10,23 +10,33 @@ on:
 jobs:
   debops:
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/${{ inputs.owner_lc }}/ansible:latest
-      credentials:
-        username: ${{ github.actor }}
-        password: ${{ secrets.GHCR_TOKEN }}      
-      env:
-         ANSIBLE_USER_SSH_PUBLIC_KEY: ${{ secrets.ANSIBLE_USER_SSH_PUBLIC_KEY }}
-         ANSIBLE_CONFIG: ./ansible.cfg
+    env:
+      ANSIBLE_USER_SSH_PUBLIC_KEY: ${{ secrets.ANSIBLE_USER_SSH_PUBLIC_KEY }}
+      ANSIBLE_CONFIG: ./ansible.cfg
+      PATH: /home/runner/.local/bin:$PATH
+
     steps:
-      # - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y openssh-client git \
+            python3-future python3-ldap python3-netaddr \
+            python3-dnspython python3-passlib python3-toml \
+            build-essential python3-dev libffi-dev libssl-dev \
+            libsasl2-dev libldap2-dev python3-pip
+
+      - name: Install DebOps
+        run: |
+          pip3 install --user --upgrade debops[ansible]
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          debops --version
 
       - name: Set up SSH agent
-        working-directory: /home/ansible/project
         run: |
-          # Start the SSH agent
           eval $(ssh-agent -s)
-          # Add the SSH private key to the agent
           echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' | ssh-add -
 
       - name: Download Inventory Artifact
@@ -34,41 +44,19 @@ jobs:
         with:
           name: ansible-inventory
 
-      # - name: Get Inventory Artifact URL
-      #   run: |
-      #     ARTIFACT_URL=$(curl -s -L -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-      #       "https://api.github.com/repos/${{ github.repository }}/actions/artifacts" | \
-      #       jq -r '.artifacts[] | select(.name=="ansible-inventory").archive_download_url')
-
-      #     echo "Download URL: $ARTIFACT_URL"
-      #     echo "ARTIFACT_URL=$ARTIFACT_URL" >> $GITHUB_ENV
-
-      # - name: Download and Extract Inventory
-      #   run: |
-      #     curl -s -L -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -o /home/ansible/ansible-inventory.zip \
-      #       "$ARTIFACT_URL"
-
-      #     unzip -o /home/ansible/ansible-inventory.zip -d /home/ansible/
-
       - name: Move Inventory File      
         run: |
-          ls -l 
+          ls -l
           pwd
           cat inventory.ini
-          mv inventory.ini /home/ansible/project/ansible/inventory/hosts
+          mkdir -p ./ansible/inventory/
+          mv inventory.ini ./ansible/inventory/hosts
 
       - name: Prepare Ansible Configurations
-        working-directory: /home/ansible/project
         run: |
           bash add_known_hosts.sh
 
       - name: Run Ansible Bootstrap
-        working-directory: /home/ansible/project
         run: |
-          ls -la /github/home/
-          ls -la /github/home/.cache/
-          ls -la /github/home/.cache/pip
-          pwd
-          pip3 show debops
           which debops
           debops run bootstrap -l amazon
