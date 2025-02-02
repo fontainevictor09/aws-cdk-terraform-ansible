@@ -21,35 +21,29 @@ jobs:
         id: set-repo-url
         run: echo "REPO_URL=${{ github.repository }}" >> $GITHUB_ENV          
           
-  build-cdk:
-    uses: ./.github/workflows/build-cdk.yml
-    needs: set-env
-    with:
-      owner_lc: ${{ needs.set-env.outputs.owner_lc }}    
-      repo_url: ${{ needs.set-env.outputs.repo_url }}
-    secrets: inherit    
-    if: |
-      contains(github.event.head_commit.modified, 'cdk-backend/')     
+  # build-cdk:
+  #   uses: ./.github/workflows/build-cdk.yml
+  #   needs: set-env
+  #   with:
+  #     owner_lc: ${{ needs.set-env.outputs.owner_lc }}    
+  #     repo_url: ${{ needs.set-env.outputs.repo_url }}
+  #   secrets: inherit      
   
-  build-inventory:
-    uses: ./.github/workflows/build-inventory.yml    
-    needs: set-env
-    with:
-      owner_lc: ${{ needs.set-env.outputs.owner_lc }}     
-      repo_url: ${{ needs.set-env.outputs.repo_url }}
-    secrets: inherit       
-    if: |
-      contains(github.event.head_commit.modified, 'terraform-inventory')     
+  # build-inventory:
+  #   uses: ./.github/workflows/build-inventory.yml    
+  #   needs: set-env
+  #   with:
+  #     owner_lc: ${{ needs.set-env.outputs.owner_lc }}     
+  #     repo_url: ${{ needs.set-env.outputs.repo_url }}
+  #   secrets: inherit       
 
-  build-debops:
-    uses: ./.github/workflows/build-debops.yml
-    needs: set-env
-    with:
-      owner_lc: ${{ needs.set-env.outputs.owner_lc }}     
-      repo_url: ${{ needs.set-env.outputs.repo_url }}
-    secrets: inherit
-    # if: |
-    #   contains(github.event.head_commit.modified, 'ansible/Dockerfile')
+  # build-debops:
+  #   uses: ./.github/workflows/build-debops.yml
+  #   needs: set-env
+  #   with:
+  #     owner_lc: ${{ needs.set-env.outputs.owner_lc }}     
+  #     repo_url: ${{ needs.set-env.outputs.repo_url }}
+  #   secrets: inherit
 
   # deploy-cdk:
   #   uses: ./.github/workflows/deploy-cdk.yml

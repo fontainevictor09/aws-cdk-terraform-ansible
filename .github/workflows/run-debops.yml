@@ -43,7 +43,6 @@ jobs:
         
       - name: Move Inventory File      
         run: |
-          ls -l /home/ansible/
           ls -l /home/ansible/ansible-inventory/
           mv /home/ansible/ansible-inventory/inventory.ini /home/ansible/project/ansible/inventory/hosts
 
