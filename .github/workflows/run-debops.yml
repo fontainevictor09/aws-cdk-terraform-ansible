@@ -16,6 +16,9 @@ jobs:
         with:
           name: ansible-inventory
           path: /home/runner/work/_temp/
+      - name: Check Inventory File      
+        run: |
+          ls -la /home/runner/work/_temp/ansible-inventory/        
   debops:
     runs-on: ubuntu-latest
     container:
@@ -43,7 +46,7 @@ jobs:
         
       - name: Move Inventory File      
         run: |
-          ls -l /home/ansible/ansible-inventory/
+          ls -la /home/ansible/ansible-inventory/
           mv /home/ansible/ansible-inventory/inventory.ini /home/ansible/project/ansible/inventory/hosts
 
       - name: Prepare Ansible Configurations
