@@ -42,7 +42,7 @@ jobs:
           mv inventory.ini ansible/project/ansible/inventory/hosts
 
       - name: Prepare Ansible Configurations
-        working-directory: /home/ansible/project
+        working-directory: ansible/project
         run: |
           bash add_known_hosts.sh
 
