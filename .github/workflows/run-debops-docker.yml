@@ -71,5 +71,4 @@ jobs:
       - name: Run Ansible Bootstrap
         working-directory: ansible/project
         run: |
-          ssh -o StrictHostKeyChecking=no -i $HOME/.ssh/id_rsa admin@51.44.7.124
           debops run bootstrap -l amazon
