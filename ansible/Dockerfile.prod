@@ -12,10 +12,8 @@ RUN useradd -ms /bin/bash ansible
 
 WORKDIR /home/ansible
 
-ENV PATH=$PATH:/root/.local/bin
+ENV PATH=$PATH:/root/.local/bin:/home/runner/.local/bin
 RUN pip3 install --user --upgrade debops[ansible]
-
-COPY ./project ./project
 
 WORKDIR /home/ansible/project
 
