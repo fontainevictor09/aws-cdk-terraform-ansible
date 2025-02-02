@@ -37,13 +37,13 @@ jobs:
   #     repo_url: ${{ needs.set-env.outputs.repo_url }}
   #   secrets: inherit       
 
-  build-debops:
-    uses: ./.github/workflows/build-debops.yml
-    needs: set-env
-    with:
-      owner_lc: ${{ needs.set-env.outputs.owner_lc }}     
-      repo_url: ${{ needs.set-env.outputs.repo_url }}
-    secrets: inherit
+  # build-debops:
+  #   uses: ./.github/workflows/build-debops.yml
+  #   needs: set-env
+  #   with:
+  #     owner_lc: ${{ needs.set-env.outputs.owner_lc }}     
+  #     repo_url: ${{ needs.set-env.outputs.repo_url }}
+  #   secrets: inherit
 
   # deploy-cdk:
   #   uses: ./.github/workflows/deploy-cdk.yml
@@ -66,7 +66,7 @@ jobs:
 
   run-debops:
     uses: ./.github/workflows/run-debops.yml
-    needs: [generate-inventory,set-env,build-debops]
+    needs: [generate-inventory,set-env]
     with:
       owner_lc: ${{ needs.set-env.outputs.owner_lc }}    
     secrets: inherit  
