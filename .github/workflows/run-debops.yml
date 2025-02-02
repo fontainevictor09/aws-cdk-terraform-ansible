@@ -23,6 +23,17 @@ jobs:
           else
             echo "Running on a full VM."
           fi    
+      - name: Debug OS
+        run: |
+          echo "OS Information:"
+          uname -a
+          cat /etc/os-release || true
+          echo "Available package managers:"
+          which apt || echo "apt not found"
+          which apt-get || echo "apt-get not found"
+          which dnf || echo "dnf not found"
+          which yum || echo "yum not found"
+          which apk || echo "apk not found"          
       - name: Install System Dependencies
         run: |
           apt update -y 
