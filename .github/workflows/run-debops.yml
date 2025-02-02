@@ -30,7 +30,7 @@ jobs:
       env:
          ANSIBLE_USER_SSH_PUBLIC_KEY: ${{ secrets.ANSIBLE_USER_SSH_PUBLIC_KEY }}
       volumes:
-        - "/home/runner/work/_temp/inventory.ini:/home/ansible/inventory.ini"
+        - "/home/runner/work/_temp/:/home/ansible/inventory"
     steps:
 
       - name: Set up SSH agent
@@ -43,9 +43,8 @@ jobs:
         
       - name: Move Inventory File      
         run: |
-          ls -l /home/ansible/
-          ls -l /home/ansible/inventory.ini
-          cat /home/ansible/inventory.ini
+          ls -l /home/ansible/inventory
+          cat /home/ansible/inventory/inventory.ini
           mv /home/ansible/inventory.ini /home/ansible/project/ansible/inventory/hosts
 
       - name: Prepare Ansible Configurations
