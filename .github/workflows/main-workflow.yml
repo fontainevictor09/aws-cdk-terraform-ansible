@@ -21,52 +21,52 @@ jobs:
         id: set-repo-url
         run: echo "REPO_URL=${{ github.repository }}" >> $GITHUB_ENV          
    
-  # build-cdk:
-  #   uses: ./.github/workflows/build-cdk.yml
-  #   needs: set-env
-  #   with:
-  #     owner_lc: ${{ needs.set-env.outputs.owner_lc }}    
-  #     repo_url: ${{ needs.set-env.outputs.repo_url }}
-  #   secrets: inherit      
+  build-cdk:
+    uses: ./.github/workflows/build-cdk.yml
+    needs: set-env
+    with:
+      owner_lc: ${{ needs.set-env.outputs.owner_lc }}    
+      repo_url: ${{ needs.set-env.outputs.repo_url }}
+    secrets: inherit      
   
-  # build-inventory:
-  #   uses: ./.github/workflows/build-inventory.yml    
-  #   needs: set-env
-  #   with:
-  #     owner_lc: ${{ needs.set-env.outputs.owner_lc }}     
-  #     repo_url: ${{ needs.set-env.outputs.repo_url }}
-  #   secrets: inherit       
+  build-inventory:
+    uses: ./.github/workflows/build-inventory.yml    
+    needs: set-env
+    with:
+      owner_lc: ${{ needs.set-env.outputs.owner_lc }}     
+      repo_url: ${{ needs.set-env.outputs.repo_url }}
+    secrets: inherit       
 
-  # build-debops:
-  #   uses: ./.github/workflows/build-debops.yml
-  #   needs: set-env
-  #   with:
-  #     owner_lc: ${{ needs.set-env.outputs.owner_lc }}     
-  #     repo_url: ${{ needs.set-env.outputs.repo_url }}
-  #   secrets: inherit
+  build-debops:
+    uses: ./.github/workflows/build-debops.yml
+    needs: set-env
+    with:
+      owner_lc: ${{ needs.set-env.outputs.owner_lc }}     
+      repo_url: ${{ needs.set-env.outputs.repo_url }}
+    secrets: inherit
 
-  # deploy-cdk:
-  #   uses: ./.github/workflows/deploy-cdk.yml
-  #   needs: set-env
-  #   with:
-  #     owner_lc: ${{ needs.set-env.outputs.owner_lc }}     
-  #   secrets: inherit      
+  deploy-cdk:
+    uses: ./.github/workflows/deploy-cdk.yml
+    needs: [set-env,build-cdk]
+    with:
+      owner_lc: ${{ needs.set-env.outputs.owner_lc }}     
+    secrets: inherit      
 
-  # terraform:
-  #   uses: ./.github/workflows/terraform.yml
-  #   needs: deploy-cdk
-  #   secrets: inherit
+  terraform:
+    uses: ./.github/workflows/terraform.yml
+    needs: [set-env,deploy-cdk]
+    secrets: inherit
 
   generate-inventory:
     uses: ./.github/workflows/generate-inventory.yml
-    needs: [set-env]
+    needs: [set-env,terraform,build-inventory]
     with:
       owner_lc: ${{ needs.set-env.outputs.owner_lc }}      
     secrets: inherit            
 
   run-debops:
     uses: ./.github/workflows/run-debops-docker.yml
-    needs: [generate-inventory,set-env]
+    needs: [generate-inventory,set-env,build-debops]
     with:
       owner_lc: ${{ needs.set-env.outputs.owner_lc }}    
     secrets: inherit  

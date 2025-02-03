@@ -69,5 +69,14 @@ jobs:
 
       - name: Run Ansible Bootstrap
         working-directory: ansible/project
+        env:
+          ANSIBLE_FORCE_COLOR: 'true'        
         run: |
           debops run bootstrap -l amazon
+
+      - name: Run Ansible Site
+        working-directory: ansible/project
+        env:
+          ANSIBLE_FORCE_COLOR: 'true'        
+        run: |
+          debops run site -l amazon
