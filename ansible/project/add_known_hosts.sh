@@ -2,7 +2,7 @@
 
 # Définition du fichier d'inventaire et du fichier known_hosts
 INVENTORY_FILE="ansible/inventory/hosts"
-KNOWN_HOSTS_FILE="$HOME/.ssh/known_hosts"
+KNOWN_HOSTS_FILE="/root/.ssh/known_hosts"
 
 # Vérifier si le fichier d'inventaire existe
 if [ ! -f "$INVENTORY_FILE" ]; then

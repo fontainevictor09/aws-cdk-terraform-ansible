@@ -23,15 +23,15 @@ jobs:
 
       - name: Set up SSH agent
         run: |
-          mkdir -p $HOME/.ssh
-          chmod 700 $HOME/.ssh        
+          mkdir -p /root/.ssh
+          chmod 700 /root/.ssh        
           # Start the SSH agen
           eval $(ssh-agent -s)
           # Add the SSH private key to the agent
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > $HOME/.ssh/id_rsa
-          chmod 600 $HOME/.ssh/id_rsa
-          ssh-add $HOME/.ssh/id_rsa
-          head -n 10 $HOME/.ssh/id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > /root/.ssh/id_rsa
+          chmod 600 /root/.ssh/id_rsa
+          ssh-add /root/.ssh/id_rsa
+          head -n 10 /root/.ssh/id_rsa
 
       - name: Download Inventory Artifact
         uses: actions/download-artifact@v4
@@ -45,7 +45,6 @@ jobs:
       - name: Prepare Ansible Configurations
         working-directory: ansible/project
         run: |
-          mkdir -p $HOME/.ssh
           bash add_known_hosts.sh
 
       - name: Display known_hosts
@@ -71,5 +70,5 @@ jobs:
       - name: Run Ansible Bootstrap
         working-directory: ansible/project
         run: |
-          ssh -vvv admin@51.44.7.124
+          # ssh -vvv admin@51.44.7.124
           debops run bootstrap -l amazon
