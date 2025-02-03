@@ -48,7 +48,7 @@ jobs:
           bash add_known_hosts.sh
 
       - name: Display known_hosts
-        run: cat $HOME/.ssh/known_hosts
+        run: cat /root/.ssh/known_hosts
 
       - name: Install DebOps
         run: |
@@ -70,5 +70,4 @@ jobs:
       - name: Run Ansible Bootstrap
         working-directory: ansible/project
         run: |
-          # ssh -vvv admin@51.44.7.124
           debops run bootstrap -l amazon
