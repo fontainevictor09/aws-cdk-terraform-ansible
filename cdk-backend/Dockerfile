@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
     && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/*
 
-# Installation de AWS CDK CLI via npm
+# Installation de AWS CDK CLI
 RUN npm install -g aws-cdk
 
 # Définition du dossier de travail par défaut
