@@ -14,13 +14,14 @@ jobs:
         AWS_REGION: ${{ vars.AWS_SECRET_ACCESS_KEY }}   
         TF_VAR_vpc_id: ${{ vars.TF_VAR_VPC_ID }}
         TF_VAR_ssh_key_name: ${{ vars.TF_VAR_SSH_KEY_NAME }}  
+        TF_VAR_s3_bucket_name: ${{ vars.TF_VAR_S3_BUCKET_NAME }}  
     steps:
       - uses: actions/checkout@v4
 
       - name: Initialize Terraform
         working-directory: terraform/project
-        run: terraform init
+        run: terraform init -backend-config="${{ vars.TF_VAR_S3_BUCKET_NAME }}"
 
       - name: Apply Terraform
         working-directory: terraform/project
-        run: terraform apply -auto-approve
+        run: terraform apply

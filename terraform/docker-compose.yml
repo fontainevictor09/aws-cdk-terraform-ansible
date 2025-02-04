@@ -10,3 +10,4 @@ services:
       #Replace by your own values or create a .env
       - "TF_VAR_vpc_id=$TF_VAR_vpc_id"
       - "TF_VAR_ssh_key_name=$TF_VAR_ssh_key_name"
+      - "TF_VAR_s3_bucket_name=$TF_VAR_s3_bucket_name"
