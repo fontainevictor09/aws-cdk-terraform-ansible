@@ -19,5 +19,4 @@ ADD requirements.txt /app/requirements.txt
 RUN pip install --upgrade -r requirements.txt
 COPY ./ /app
 
-# Commande par défaut : ouvrir un shell interactif
 CMD ["/bin/bash"]
