@@ -21,53 +21,76 @@ jobs:
       - name: Set repository URL
         id: set-repo-url
         run: echo "REPO_URL=${{ github.repository }}" >> $GITHUB_ENV          
-   
+
+  check-build:
+    runs-on: ubuntu-latest
+    outputs:
+      build_required: ${{ steps.check-changes.outputs.build_required }}
+    steps:
+      - name: Check if build is needed
+        id: check-changes
+        run: |
+          if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q 'Dockerfile\|build/'; then
+            echo "build_required=true" >> $GITHUB_ENV
+            echo "build_required=true" >> $GITHUB_OUTPUT
+          else
+            echo "build_required=false" >> $GITHUB_ENV
+            echo "build_required=false" >> $GITHUB_OUTPUT
+          fi
+
   build-cdk:
+    if: needs.check-build.outputs.build_required == 'true'
     uses: ./.github/workflows/build-cdk.yml
-    needs: set-env
+    needs: [set-env, check-build]
     with:
       owner_lc: ${{ needs.set-env.outputs.owner_lc }}    
       repo_url: ${{ needs.set-env.outputs.repo_url }}
     secrets: inherit      
-  
+
   build-inventory:
+    if: needs.check-build.outputs.build_required == 'true'
     uses: ./.github/workflows/build-inventory.yml    
-    needs: set-env
+    needs: [set-env, check-build]
     with:
       owner_lc: ${{ needs.set-env.outputs.owner_lc }}     
       repo_url: ${{ needs.set-env.outputs.repo_url }}
     secrets: inherit       
 
   build-debops:
+    if: needs.check-build.outputs.build_required == 'true'
     uses: ./.github/workflows/build-debops.yml
-    needs: set-env
+    needs: [set-env, check-build]
     with:
       owner_lc: ${{ needs.set-env.outputs.owner_lc }}     
       repo_url: ${{ needs.set-env.outputs.repo_url }}
     secrets: inherit
 
   deploy-cdk:
+    needs: [set-env, check-build]
+    if: needs.check-build.outputs.build_required == 'false' || success()
     uses: ./.github/workflows/deploy-cdk.yml
-    needs: [set-env,build-cdk]
     with:
       owner_lc: ${{ needs.set-env.outputs.owner_lc }}     
     secrets: inherit      
 
   terraform:
+    needs: [set-env, deploy-cdk]
+    if: needs.check-build.outputs.build_required == 'false' || success()
     uses: ./.github/workflows/terraform.yml
-    needs: [set-env,deploy-cdk]
     secrets: inherit
 
   generate-inventory:
+    needs: [set-env, terraform, check-build]
+    if: needs.check-build.outputs.build_required == 'false' || success()
     uses: ./.github/workflows/generate-inventory.yml
-    needs: [set-env,terraform,build-inventory]
     with:
       owner_lc: ${{ needs.set-env.outputs.owner_lc }}      
     secrets: inherit            
 
   run-debops:
+    needs: [generate-inventory, set-env, check-build]
+    if: needs.check-build.outputs.build_required == 'false' || success()
     uses: ./.github/workflows/run-debops-docker.yml
-    needs: [generate-inventory,set-env,build-debops]
     with:
       owner_lc: ${{ needs.set-env.outputs.owner_lc }}    
-    secrets: inherit  
+    secrets: inherit
