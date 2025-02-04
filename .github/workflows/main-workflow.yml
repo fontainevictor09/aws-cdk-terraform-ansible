@@ -21,107 +21,53 @@ jobs:
       - name: Set repository URL
         id: set-repo-url
         run: echo "REPO_URL=${{ github.repository }}" >> $GITHUB_ENV          
-
-  check-build:
-    runs-on: ubuntu-latest
-    outputs:
-      build_required: ${{ steps.check-changes.outputs.build_required }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3  # Checkout le code dans le répertoire de travail
-
-      - name: Fetch all branches and commits
-        run: |
-          git fetch --all  # Cela récupère toutes les branches et tous les commits du dépôt.
-
-      - name: Display refs
-        run: |
-          echo "Base ref: ${{ github.base_ref }}"
-          echo "Head ref: ${{ github.head_ref }}"
-          git branch -r  # Affiche les branches distantes pour vérifier leur existence.
-
-      - name: Check if build is needed
-        id: check-changes
-        run: |
-          # Vérification des refs, utilisation de 'main' par défaut si vide
-          BASE_REF=${{ github.base_ref }}
-          HEAD_REF=${{ github.head_ref }}
-          
-          if [ -z "$BASE_REF" ]; then
-            BASE_REF="main"  # Utilisation de 'main' si base_ref est vide
-          fi
-
-          if [ -z "$HEAD_REF" ]; then
-            HEAD_REF="main"  # Utilisation de 'main' si head_ref est vide
-          fi
-
-          # Comparer les changements entre les deux commits (avant et après)
-          git diff --name-only origin/${BASE_REF} origin/${HEAD_REF}
-
-          # Vérifier si un Dockerfile ou des fichiers dans 'build/' ont changé
-          if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q 'Dockerfile\|build/'; then
-            echo "build_required=true" >> $GITHUB_ENV
-            echo "build_required=true" >> $GITHUB_OUTPUT
-          else
-            echo "build_required=false" >> $GITHUB_ENV
-            echo "build_required=false" >> $GITHUB_OUTPUT
-          fi
-
-
-
+   
   build-cdk:
-    if: needs.check-build.outputs.build_required == 'true'
     uses: ./.github/workflows/build-cdk.yml
-    needs: [set-env, check-build]
+    needs: set-env
     with:
       owner_lc: ${{ needs.set-env.outputs.owner_lc }}    
       repo_url: ${{ needs.set-env.outputs.repo_url }}
     secrets: inherit      
-
+  
   build-inventory:
-    if: needs.check-build.outputs.build_required == 'true'
     uses: ./.github/workflows/build-inventory.yml    
-    needs: [set-env, check-build]
+    needs: set-env
     with:
       owner_lc: ${{ needs.set-env.outputs.owner_lc }}     
       repo_url: ${{ needs.set-env.outputs.repo_url }}
     secrets: inherit       
 
   build-debops:
-    if: needs.check-build.outputs.build_required == 'true'
     uses: ./.github/workflows/build-debops.yml
-    needs: [set-env, check-build]
+    needs: set-env
     with:
       owner_lc: ${{ needs.set-env.outputs.owner_lc }}     
       repo_url: ${{ needs.set-env.outputs.repo_url }}
     secrets: inherit
 
   deploy-cdk:
-    needs: [set-env, check-build]
-    if: needs.check-build.outputs.build_required == 'false' || (needs.build-cdk.result == 'success')
     uses: ./.github/workflows/deploy-cdk.yml
+    needs: [set-env,build-cdk]
     with:
       owner_lc: ${{ needs.set-env.outputs.owner_lc }}     
     secrets: inherit      
 
   terraform:
-    needs: [set-env, deploy-cdk]
-    if: needs.check-build.outputs.build_required == 'false' || (needs.build-cdk.result == 'success')
     uses: ./.github/workflows/terraform.yml
+    needs: [set-env,deploy-cdk]
     secrets: inherit
 
   generate-inventory:
-    needs: [set-env, terraform, check-build]
-    if: needs.check-build.outputs.build_required == 'false' || (needs.build-cdk.result == 'success')
     uses: ./.github/workflows/generate-inventory.yml
+    needs: [set-env,terraform,build-inventory]
     with:
       owner_lc: ${{ needs.set-env.outputs.owner_lc }}      
     secrets: inherit            
 
   run-debops:
-    needs: [generate-inventory, set-env, check-build]
-    if: needs.check-build.outputs.build_required == 'false' || (needs.build-cdk.result == 'success')
     uses: ./.github/workflows/run-debops-docker.yml
+    needs: [generate-inventory,set-env,build-debops]
     with:
       owner_lc: ${{ needs.set-env.outputs.owner_lc }}    
-    secrets: inherit
+    secrets: inherit  
