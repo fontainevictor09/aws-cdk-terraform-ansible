@@ -20,7 +20,7 @@ jobs:
 
       - name: Initialize Terraform
         working-directory: terraform/project
-        run: terraform init -backend-config="${{ vars.TF_VAR_S3_BUCKET_NAME }}"
+        run: terraform init -backend-config="bucket=${{ vars.TF_VAR_S3_BUCKET_NAME }}"
 
       - name: Apply Terraform
         working-directory: terraform/project
