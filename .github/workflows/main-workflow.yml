@@ -36,8 +36,10 @@ jobs:
           # Récupérer les changements entre le dernier commit et celui actuellement référencé
           git fetch origin ${{ github.base_ref }} ${{ github.head_ref }} # Assure la récupération correcte des deux refs
 
-          git diff --name-only origin/${{ github.base_ref }}..origin/${{ github.head_ref }}
+          # Comparer les changements entre les deux commits
+          git diff --name-only origin/${{ github.base_ref }} origin/${{ github.head_ref }}
 
+          # Vérifier si un Dockerfile ou des fichiers dans 'build/' ont changé
           if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q 'Dockerfile\|build/'; then
             echo "build_required=true" >> $GITHUB_ENV
             echo "build_required=true" >> $GITHUB_OUTPUT
