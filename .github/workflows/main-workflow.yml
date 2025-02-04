@@ -67,7 +67,7 @@ jobs:
 
   deploy-cdk:
     needs: [set-env, check-build]
-    if: needs.check-build.outputs.build_required == 'false' || success()
+    if: needs.check-build.outputs.build_required == 'false' || (needs.build-cdk.result == 'success')
     uses: ./.github/workflows/deploy-cdk.yml
     with:
       owner_lc: ${{ needs.set-env.outputs.owner_lc }}     
@@ -75,13 +75,13 @@ jobs:
 
   terraform:
     needs: [set-env, deploy-cdk]
-    if: needs.check-build.outputs.build_required == 'false' || success()
+    if: needs.check-build.outputs.build_required == 'false' || (needs.build-cdk.result == 'success')
     uses: ./.github/workflows/terraform.yml
     secrets: inherit
 
   generate-inventory:
     needs: [set-env, terraform, check-build]
-    if: needs.check-build.outputs.build_required == 'false' || success()
+    if: needs.check-build.outputs.build_required == 'false' || (needs.build-cdk.result == 'success')
     uses: ./.github/workflows/generate-inventory.yml
     with:
       owner_lc: ${{ needs.set-env.outputs.owner_lc }}      
@@ -89,7 +89,7 @@ jobs:
 
   run-debops:
     needs: [generate-inventory, set-env, check-build]
-    if: needs.check-build.outputs.build_required == 'false' || success()
+    if: needs.check-build.outputs.build_required == 'false' || (needs.build-cdk.result == 'success')
     uses: ./.github/workflows/run-debops-docker.yml
     with:
       owner_lc: ${{ needs.set-env.outputs.owner_lc }}    
