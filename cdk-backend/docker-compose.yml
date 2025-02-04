@@ -8,3 +8,7 @@ services:
     volumes:
       - './:/app/:cached'
       - "~/.aws:/root/.aws"      
+    environment:
+      #Replace by your own values or create a .env
+      - "TF_STATE_BUCKET=$TF_STATE_BUCKET"
+      - "TF_LOCK_TABLE=$TF_LOCK_TABLE"      
