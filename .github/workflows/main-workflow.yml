@@ -30,13 +30,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3  # Checkout le code dans le répertoire de travail
 
+      - name: Fetch all branches and commits
+        run: |
+          git fetch --all  # Cela récupère toutes les branches et tous les commits du dépôt.
+
+      - name: Display refs
+        run: |
+          echo "Base ref: ${{ github.base_ref }}"
+          echo "Head ref: ${{ github.head_ref }}"
+          git branch -r  # Affiche les branches distantes pour vérifier leur existence.
+
       - name: Check if build is needed
         id: check-changes
         run: |
-          # Récupérer les changements entre le dernier commit et celui actuellement référencé
-          git fetch origin ${{ github.base_ref }} ${{ github.head_ref }} # Assure la récupération correcte des deux refs
-
-          # Comparer les changements entre les deux commits
+          # Comparer les changements entre les deux commits (avant et après).
           git diff --name-only origin/${{ github.base_ref }} origin/${{ github.head_ref }}
 
           # Vérifier si un Dockerfile ou des fichiers dans 'build/' ont changé
