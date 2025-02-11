@@ -50,11 +50,11 @@ jobs:
       - name: Display known_hosts
         run: cat /root/.ssh/known_hosts
 
-      - name: Install DebOps
-        run: |
-          pip3 install --upgrade debops[ansible]
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
-          debops --version
+      # - name: Install DebOps
+      #   run: |
+      #     pip3 install --upgrade debops[ansible]
+      #     echo "$HOME/.local/bin" >> $GITHUB_PATH
+      #     debops --version
 
       - name: Debug DebOps Files
         run: |

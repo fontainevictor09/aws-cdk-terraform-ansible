@@ -16,7 +16,7 @@ WORKDIR /home/ansible
 
 # ENV PATH=$PATH:/home/ansible/.local/bin:/home/runner/.local/bin:$PATH
 ENV PATH=/home/runner/.local/bin:$PATH
-# RUN pip3 install --upgrade debops[ansible]
+RUN pip3 install --upgrade debops[ansible]
 
 WORKDIR /home/ansible/project
 
