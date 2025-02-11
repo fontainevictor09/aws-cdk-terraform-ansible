@@ -15,6 +15,7 @@ jobs:
         TF_VAR_vpc_id: ${{ vars.TF_VAR_VPC_ID }}
         TF_VAR_ssh_key_name: ${{ vars.TF_VAR_SSH_KEY_NAME }}  
         TF_VAR_s3_bucket_name: ${{ vars.TF_VAR_S3_BUCKET_NAME }}  
+        TF_VAR_vm_count: ${{ vars.TF_VAR_VM_COUNT }}  
     steps:
       - uses: actions/checkout@v4
 
